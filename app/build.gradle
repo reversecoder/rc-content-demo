@@ -9,7 +9,7 @@ android {
     buildToolsVersion appBuildToolsVersion
 
     defaultConfig {
-        applicationId "com.reversecoder.media.demo"
+        applicationId "com.reversecoder.content.demo"
         minSdkVersion appMinSdkVersion
         targetSdkVersion appTargetSdkVersion
         versionCode appVersionCode
@@ -40,7 +40,7 @@ dependencies {
 
     compile "com.android.support:appcompat-v7:$supportlibraryVersion"
 
-    compile project(":rc-media")
+    compile project(':rc-content')
 
     testCompile 'junit:junit:4.12'
 }
