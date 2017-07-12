@@ -92,9 +92,7 @@ public class VideoLoader {
         String selection = MediaStore.Video.Media.DATA;
         String[] selectionArgs = {videoPath};
         String[] projection = new String[]{MediaStore.Video.VideoColumns._ID, MediaStore.Video.VideoColumns.TITLE, MediaStore.Video.VideoColumns.ARTIST,
-                MediaStore.Video.VideoColumns.ALBUM, MediaStore.Video.VideoColumns.DURATION,MediaStore.Video.VideoColumns.SIZE
-//                , MediaStore.Video.VideoColumns.TRACK, MediaStore.Video.VideoColumns.ARTIST_ID, MediaStore.Video.VideoColumns.ALBUM_ID
-        };
+                MediaStore.Video.VideoColumns.ALBUM, MediaStore.Video.VideoColumns.DURATION,MediaStore.Video.VideoColumns.SIZE};
         String sortOrder = MediaStore.Video.Media.TITLE + " ASC";
 
         Cursor cursor = cr.query(uri, projection, selection + "=?", selectionArgs, sortOrder);

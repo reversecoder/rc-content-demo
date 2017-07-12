@@ -87,7 +87,7 @@ public class FileLoader {
         String[] selectionArgs = null; // there is no ? in selection so null here
         // every column, although that is huge waste, you probably need
         // BaseColumns.DATA (the path) only.
-        String[] projection = null;
+        String[] projection = new String[]{MediaStore.Files.FileColumns._ID, MediaStore.Files.FileColumns.MIME_TYPE, MediaStore.Files.FileColumns.TITLE, MediaStore.Files.FileColumns.SIZE};
         String sortOrder = MediaStore.Files.FileColumns.TITLE + " ASC";
 
         Cursor cursor = cr.query(uri, projection, selection + "=?", selectionArgs, sortOrder);
@@ -130,12 +130,17 @@ public class FileLoader {
     }
 
     private static Cursor makeFileCursor(Context context, String selection, String[] paramArrayOfString, String sortOrder) {
-        String selectionStatement = "title != ''";
+        String selectionStatement = "is_music=0 AND " +
+                "is_ringtone=0 AND " +
+                "is_podcast=0 AND " +
+                "is_alarm=0 AND " +
+                "is_notification=0 AND " +
+                "title != ''";
 
         if (!TextUtils.isEmpty(selection)) {
             selectionStatement = selectionStatement + " AND " + selection;
         }
-        return context.getContentResolver().query(MediaStore.Files.getContentUri(CONTENT_URI_EXTERNAL), null, selectionStatement, paramArrayOfString, sortOrder);
+        return context.getContentResolver().query(MediaStore.Files.getContentUri(CONTENT_URI_EXTERNAL), new String[]{MediaStore.Files.FileColumns._ID, MediaStore.Files.FileColumns.MIME_TYPE, MediaStore.Files.FileColumns.TITLE, MediaStore.Files.FileColumns.SIZE}, selectionStatement, paramArrayOfString, sortOrder);
 
     }
 

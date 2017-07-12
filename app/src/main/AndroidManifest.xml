@@ -11,6 +11,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
+            android:label="@string/title_activity_main"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,6 +19,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activity.StorageManagementActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_storage_management"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".activity.PictureActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_picture"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".activity.MusicActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_music"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".activity.MoviesActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_movies"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".activity.ApplicationsActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_applications"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".activity.OthersActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_others"
+            android:theme="@style/AppTheme"/>
 
     </application>
 

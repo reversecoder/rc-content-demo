@@ -2,13 +2,16 @@ package com.reversecoder.content.helper.model;
 
 import android.net.Uri;
 
+import com.reversecoder.content.helper.util.AppUtil;
+
 public class File extends WrapperBase {
 
-    public final long id;
-    public final String mimeType;
-    public final String title;
-    public final int size;
-    public final Uri uri;
+    private final long id;
+    private final String mimeType;
+    private String title;
+    private String path="";
+    private final int size;
+    private final Uri uri;
 
     public File() {
         this.id = -1;
@@ -26,13 +29,50 @@ public class File extends WrapperBase {
         this.uri = uri;
     }
 
+
+    public long getId() {
+        return id;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public String getReadableSize() {
+        return AppUtil.getReadableFileSize(size);
+    }
+
+    public Uri getUri() {
+        return uri;
+    }
+
     @Override
     public String toString() {
         return "File{" +
                 "id=" + id +
                 ", mimeType='" + mimeType + '\'' +
                 ", title='" + title + '\'' +
-                ", size=" + size +
+                ", size=" + getReadableSize() +
                 ", uri=" + uri +
                 '}';
     }

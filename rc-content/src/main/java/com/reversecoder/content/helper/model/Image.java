@@ -2,16 +2,17 @@ package com.reversecoder.content.helper.model;
 
 import android.net.Uri;
 
+import com.reversecoder.content.helper.util.AppUtil;
 
 public class Image extends WrapperBase {
 
-    public final long id;
-    public final String title;
-    public final String dateTaken;
-    public final String dateAdded;
-    public final String dateModified;
-    public final int size;
-    public final Uri uri;
+    private final long id;
+    private final String title;
+    private final String dateTaken;
+    private final String dateAdded;
+    private final String dateModified;
+    private final int size;
+    private final Uri uri;
 
     public Image() {
         this.id = -1;
@@ -33,6 +34,38 @@ public class Image extends WrapperBase {
         this.uri = uri;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDateTaken() {
+        return dateTaken;
+    }
+
+    public String getDateAdded() {
+        return dateAdded;
+    }
+
+    public String getDateModified() {
+        return dateModified;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public String getReadableSize() {
+        return AppUtil.getReadableFileSize(size);
+    }
+
+    public Uri getUri() {
+        return uri;
+    }
+
     @Override
     public String toString() {
         return "Image{" +
@@ -41,7 +74,7 @@ public class Image extends WrapperBase {
                 ", dateTaken='" + dateTaken + '\'' +
                 ", dateAdded='" + dateAdded + '\'' +
                 ", dateModified='" + dateModified + '\'' +
-                ", size=" + size +
+                ", size=" + getReadableSize() +
                 ", uri=" + uri +
                 '}';
     }

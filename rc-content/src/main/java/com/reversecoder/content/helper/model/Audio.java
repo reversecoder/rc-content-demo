@@ -2,20 +2,20 @@ package com.reversecoder.content.helper.model;
 
 import android.net.Uri;
 
-import com.reversecoder.content.helper.model.WrapperBase;
+import com.reversecoder.content.helper.util.AppUtil;
 
 public class Audio extends WrapperBase {
 
-    public final long albumId;
-    public final String albumName;
-    public final long artistId;
-    public final String artistName;
-    public final int duration;
-    public final long id;
-    public final String title;
-    public final int trackNumber;
-    public final int size;
-    public final Uri uri;
+    private final long albumId;
+    private final String albumName;
+    private final long artistId;
+    private final String artistName;
+    private final int duration;
+    private final long id;
+    private final String title;
+    private final int trackNumber;
+    private final int size;
+    private final Uri uri;
 
     public Audio() {
         this.id = -1;
@@ -43,6 +43,50 @@ public class Audio extends WrapperBase {
         this.uri = uri;
     }
 
+    public long getAlbumId() {
+        return albumId;
+    }
+
+    public String getAlbumName() {
+        return albumName;
+    }
+
+    public long getArtistId() {
+        return artistId;
+    }
+
+    public String getArtistName() {
+        return artistName;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getTrackNumber() {
+        return trackNumber;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public String getReadableSize() {
+        return AppUtil.getReadableFileSize(size);
+    }
+
+    public Uri getUri() {
+        return uri;
+    }
+
     @Override
     public String toString() {
         return "Audio{" +
@@ -54,7 +98,7 @@ public class Audio extends WrapperBase {
                 ", id=" + id +
                 ", title='" + title + '\'' +
                 ", trackNumber=" + trackNumber +
-                ", size=" + size +
+                ", size=" + getReadableSize() +
                 ", uri=" + uri +
                 '}';
     }
