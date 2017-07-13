@@ -1,8 +1,12 @@
 package com.reversecoder.content.helper.model;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class AppInfo extends WrapperBase {
+public class AppInfo extends WrapperBase implements Parcelable {
 
     private String appName = "";
     private String packageName = "";
@@ -135,5 +139,63 @@ public class AppInfo extends WrapperBase {
                 ", apkSize=" + apkSize +
                 ", sdCardPath='" + sdCardPath + '\'' +
                 '}';
+    }
+
+    /**********************************
+     * Parcelable implementation
+     *********************************/
+    private AppInfo(Parcel in) {
+        appName = in.readString();
+        packageName = in.readString();
+        versionName = in.readString();
+        versionCode = in.readInt();
+
+        // Deserialize Parcelable and cast to Bitmap first:
+        Bitmap bitmap = (Bitmap) in.readParcelable(getClass().getClassLoader());
+        // Convert Bitmap to Drawable:
+        icon = new BitmapDrawable(bitmap);
+
+        dataDirectory = in.readString();
+        cacheSize = in.readLong();
+        dataSize = in.readLong();
+        packageSize = in.readLong();
+        apkSize = in.readLong();
+        sdCardPath = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(appName);
+        dest.writeString(packageName);
+        dest.writeString(versionName);
+        dest.writeInt(versionCode);
+
+        // Convert Drawable to Bitmap first:
+        Bitmap bitmap = (Bitmap) ((BitmapDrawable) icon).getBitmap();
+        // Serialize bitmap as Parcelable:
+        dest.writeParcelable(bitmap, flags);
+
+        dest.writeString(dataDirectory);
+        dest.writeLong(cacheSize);
+        dest.writeLong(dataSize);
+        dest.writeLong(packageSize);
+        dest.writeLong(apkSize);
+        dest.writeString(sdCardPath);
+    }
+
+    public static final Parcelable.Creator<AppInfo> CREATOR = new Parcelable.Creator<AppInfo>() {
+        public AppInfo createFromParcel(Parcel in) {
+            return new AppInfo(in);
+        }
+
+        public AppInfo[] newArray(int size) {
+            return new AppInfo[size];
+
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 }

@@ -13,6 +13,8 @@ import com.reversecoder.content.nonmedia.file.FileLoader;
 
 import java.util.ArrayList;
 
+import static com.reversecoder.content.demo.activity.StorageManagementActivity.allOther;
+
 /**
  * @author Md. Rashadul Alam
  */
@@ -34,24 +36,6 @@ public class OthersActivity extends AppCompatActivity {
 
         storageListViewAdapter = new StorageAdapter(OthersActivity.this, StorageAdapter.ADAPTER_TYPE.OTHER);
         lvStorage.setAdapter(storageListViewAdapter);
-        storageListViewAdapter.setData(getAllFiles());
-    }
-
-    private ArrayList<FileInfo> getAllFiles() {
-        ArrayList<FileInfo> allFileInfos = new ArrayList<FileInfo>();
-        ArrayList<FileInfo> allFileLoaderFileInfo = FileLoader.getAllFiles(OthersActivity.this);
-        allFileInfos.addAll(allFileLoaderFileInfo);
-
-        ArrayList<java.io.File> withoutFileLoaderFile = StorageManager.getInstance().getAllFilesFromExternalSdCard(Environment.getExternalStorageDirectory(), StorageManager.FileType.DOCUMENT);
-        FileInfo fileInfo;
-        for (int i = 0; i < withoutFileLoaderFile.size(); i++) {
-            fileInfo = new FileInfo();
-            fileInfo.setTitle(withoutFileLoaderFile.get(i).getName());
-            fileInfo.setPath(withoutFileLoaderFile.get(i).getAbsolutePath());
-            fileInfo.setSize((int) withoutFileLoaderFile.get(i).length());
-            allFileInfos.add(fileInfo);
-        }
-
-        return allFileInfos;
+        storageListViewAdapter.setData(allOther);
     }
 }

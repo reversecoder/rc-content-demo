@@ -8,6 +8,8 @@ import com.reversecoder.content.demo.R;
 import com.reversecoder.content.demo.adapter.StorageAdapter;
 import com.reversecoder.content.media.video.VideoLoader;
 
+import static com.reversecoder.content.demo.activity.StorageManagementActivity.allMovies;
+
 /**
  * @author Md. Rashadul Alam
  */
@@ -29,6 +31,6 @@ public class MoviesActivity extends AppCompatActivity {
 
         storageListViewAdapter = new StorageAdapter(MoviesActivity.this, StorageAdapter.ADAPTER_TYPE.MOVIE);
         lvStorage.setAdapter(storageListViewAdapter);
-        storageListViewAdapter.setData(VideoLoader.getAllVideos(MoviesActivity.this));
+        storageListViewAdapter.setData(allMovies);
     }
 }

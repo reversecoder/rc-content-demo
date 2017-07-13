@@ -5,12 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
 import com.reversecoder.content.helper.model.FileInfo;
 import com.reversecoder.content.helper.sort.SortOrder;
+import com.reversecoder.content.helper.util.StorageManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,6 +154,24 @@ public class FileLoader {
                 "",
                 "", 0, null
         );
+    }
+
+    public static ArrayList<FileInfo> getAllDocuments(Context context) {
+        ArrayList<FileInfo> allFileInfos = new ArrayList<FileInfo>();
+        ArrayList<FileInfo> allFileLoaderFileInfo = FileLoader.getAllFiles(context);
+        allFileInfos.addAll(allFileLoaderFileInfo);
+
+        ArrayList<java.io.File> withoutFileLoaderFile = StorageManager.getInstance().getAllFilesFromExternalSdCard(Environment.getExternalStorageDirectory(), StorageManager.FileType.DOCUMENT);
+        FileInfo fileInfo;
+        for (int i = 0; i < withoutFileLoaderFile.size(); i++) {
+            fileInfo = new FileInfo();
+            fileInfo.setTitle(withoutFileLoaderFile.get(i).getName());
+            fileInfo.setPath(withoutFileLoaderFile.get(i).getAbsolutePath());
+            fileInfo.setSize((int) withoutFileLoaderFile.get(i).length());
+            allFileInfos.add(fileInfo);
+        }
+
+        return allFileInfos;
     }
 
 }

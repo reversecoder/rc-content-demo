@@ -6,11 +6,14 @@ import android.content.pm.IPackageStatsObserver;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
+import android.os.Environment;
 import android.os.RemoteException;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
 
 import com.reversecoder.content.helper.model.AppInfo;
+import com.reversecoder.content.helper.util.StorageManager;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,5 +96,24 @@ public class ApplicationLoader {
 
     public interface PackageStatsCallback {
         public void getPackageStats(PackageStats packageStats);
+    }
+
+    public static ArrayList<AppInfo> getAllInstalledWithUnusedApks(Context context, int defaultAppIcon) {
+        ArrayList<AppInfo> allApks = new ArrayList<AppInfo>();
+        ArrayList<AppInfo> installedApp = ApplicationLoader.getInstalledApplications(context);
+        allApks.addAll(installedApp);
+
+        AppInfo appInfo;
+        ArrayList<File> unUsedApk = StorageManager.getInstance().getAllFilesFromExternalSdCard(Environment.getExternalStorageDirectory(), StorageManager.FileType.APK);
+        for (int i = 0; i < unUsedApk.size(); i++) {
+            appInfo = new AppInfo();
+            appInfo.setAppName(unUsedApk.get(i).getName());
+            appInfo.setApkSize(unUsedApk.get(i).length());
+            appInfo.setIcon(ContextCompat.getDrawable(context, defaultAppIcon));
+            appInfo.setSdCardPath(unUsedApk.get(i).getAbsolutePath());
+            allApks.add(appInfo);
+        }
+
+        return allApks;
     }
 }

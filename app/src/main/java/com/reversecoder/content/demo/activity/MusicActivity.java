@@ -8,6 +8,8 @@ import com.reversecoder.content.demo.R;
 import com.reversecoder.content.demo.adapter.StorageAdapter;
 import com.reversecoder.content.media.audio.AudioLoader;
 
+import static com.reversecoder.content.demo.activity.StorageManagementActivity.allMusics;
+
 /**
  * @author Md. Rashadul Alam
  */
@@ -29,6 +31,6 @@ public class MusicActivity extends AppCompatActivity {
 
         storageListViewAdapter = new StorageAdapter(MusicActivity.this, StorageAdapter.ADAPTER_TYPE.MUSIC);
         lvStorage.setAdapter(storageListViewAdapter);
-        storageListViewAdapter.setData(AudioLoader.getAllAudios(MusicActivity.this));
+        storageListViewAdapter.setData(allMusics);
     }
 }

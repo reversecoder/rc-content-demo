@@ -6,7 +6,8 @@ import android.widget.GridView;
 
 import com.reversecoder.content.demo.R;
 import com.reversecoder.content.demo.adapter.StorageAdapter;
-import com.reversecoder.content.media.image.ImageLoader;
+
+import static com.reversecoder.content.demo.activity.StorageManagementActivity.allImages;
 
 /**
  * @author Md. Rashadul Alam
@@ -25,10 +26,10 @@ public class PictureActivity extends AppCompatActivity {
     }
 
     private void initUI() {
-        gvStorage= (GridView)findViewById(R.id.gv_storage);
+        gvStorage = (GridView) findViewById(R.id.gv_storage);
 
         storageGridViewAdapter = new StorageAdapter(PictureActivity.this, StorageAdapter.ADAPTER_TYPE.PICTURE);
         gvStorage.setAdapter(storageGridViewAdapter);
-        storageGridViewAdapter.setData(ImageLoader.getAllImages(PictureActivity.this));
+        storageGridViewAdapter.setData(allImages);
     }
 }
