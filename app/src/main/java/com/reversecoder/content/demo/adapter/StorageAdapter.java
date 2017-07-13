@@ -1,7 +1,9 @@
 package com.reversecoder.content.demo.adapter;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,6 +93,7 @@ public class StorageAdapter<T> extends BaseAdapter {
                     .with(mActivity)
                     .load(imageInfo.getUri())
                     .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC))
+                    .apply(new RequestOptions().placeholder(R.drawable.picture_default))
                     .into(ivDefaultIcon);
         } else {
 
@@ -103,12 +106,22 @@ public class StorageAdapter<T> extends BaseAdapter {
 
             if (mAdapterType == ADAPTER_TYPE.MUSIC) {
                 AudioInfo audioInfo = (AudioInfo) mItem;
-                ivDefaultIcon.setBackgroundResource(R.drawable.music_default);
+                Glide
+                        .with(mActivity)
+                        .load(ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), audioInfo.getAlbumId()))
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC))
+                        .apply(new RequestOptions().placeholder(R.drawable.music_default))
+                        .into(ivDefaultIcon);
                 tvTitle.setText(audioInfo.getTitle());
                 tvSubTitle.setText(audioInfo.getReadableSize());
             } else if (mAdapterType == ADAPTER_TYPE.MOVIE) {
                 VideoInfo videoInfo = (VideoInfo) mItem;
-                ivDefaultIcon.setBackgroundResource(R.drawable.movie_default);
+                Glide
+                        .with(mActivity)
+                        .load(videoInfo.getUri())
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC))
+                        .apply(new RequestOptions().placeholder(R.drawable.movie_default))
+                        .into(ivDefaultIcon);
                 tvTitle.setText(videoInfo.getTitle());
                 tvSubTitle.setText(videoInfo.getReadableSize());
             } else if (mAdapterType == ADAPTER_TYPE.APPLICATION) {
@@ -123,7 +136,6 @@ public class StorageAdapter<T> extends BaseAdapter {
                 tvSubTitle.setText(AppUtil.getReadableFileSize(other.getSize()));
             }
         }
-
 
         return vi;
     }
