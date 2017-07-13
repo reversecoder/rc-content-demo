@@ -3,7 +3,9 @@ package com.reversecoder.content.demo.adapter;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,11 +36,13 @@ public class StorageAdapter<T> extends BaseAdapter {
     private ArrayList<T> mData;
     private static LayoutInflater inflater = null;
     private ADAPTER_TYPE mAdapterType;
+    private SparseBooleanArray mSelectedItemsIds;
 
     public StorageAdapter(Activity activity, ADAPTER_TYPE adapterType) {
         mActivity = activity;
         mAdapterType = adapterType;
         mData = new ArrayList<T>();
+        mSelectedItemsIds = new SparseBooleanArray();
         inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -54,12 +58,17 @@ public class StorageAdapter<T> extends BaseAdapter {
 
 //    public int getItemPosition(String name) {
 //        for (int i = 0; i < mData.size(); i++) {
-//            if (((SpinnerItem) mData.get(i)).getName().contains(name)) {
+//            if (((WrapperBase) mData.get(i)).getName().contains(name)) {
 //                return i;
 //            }
 //        }
 //        return -1;
 //    }
+
+
+    public ADAPTER_TYPE getAdapterType() {
+        return mAdapterType;
+    }
 
     @Override
     public int getCount() {
@@ -135,10 +144,53 @@ public class StorageAdapter<T> extends BaseAdapter {
                 tvTitle.setText(other.getTitle());
                 tvSubTitle.setText(AppUtil.getReadableFileSize(other.getSize()));
             }
+
+            /***************************************************************
+             * Change background color of the selected items in list view
+             **************************************************************/
+            vi.setBackgroundColor(mSelectedItemsIds.get(position) ? 0x9934B5E4
+                    : Color.TRANSPARENT);
         }
 
         return vi;
     }
 
     public enum ADAPTER_TYPE {MUSIC, MOVIE, APPLICATION, OTHER, PICTURE}
+
+    /*************************************************************
+     * Methods required for do selections, remove selections, etc.
+     *************************************************************/
+
+    //Toggle selection methods
+    public void toggleSelection(int position) {
+        selectView(position, !mSelectedItemsIds.get(position));
+    }
+
+
+    //Remove selected selections
+    public void removeSelection() {
+        mSelectedItemsIds = new SparseBooleanArray();
+        notifyDataSetChanged();
+    }
+
+
+    //Put or delete selected position into SparseBooleanArray
+    public void selectView(int position, boolean value) {
+        if (value)
+            mSelectedItemsIds.put(position, value);
+        else
+            mSelectedItemsIds.delete(position);
+
+        notifyDataSetChanged();
+    }
+
+    //Get total selected count
+    public int getSelectedCount() {
+        return mSelectedItemsIds.size();
+    }
+
+    //Return all selected ids
+    public SparseBooleanArray getSelectedIds() {
+        return mSelectedItemsIds;
+    }
 }
