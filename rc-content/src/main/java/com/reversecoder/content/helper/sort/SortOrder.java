@@ -11,31 +11,31 @@ public final class SortOrder {
     }
 
     /**
-     * Audio sort order entries.
+     * AudioInfo sort order entries.
      */
     public interface AudioSortOrder {
-        /* Audio sort order A-Z */
+        /* AudioInfo sort order A-Z */
         String AUDIO_A_Z = MediaStore.Audio.Media.DEFAULT_SORT_ORDER;
 
-        /* Audio sort order Z-A */
+        /* AudioInfo sort order Z-A */
         String AUDIO_Z_A = AUDIO_A_Z + " DESC";
 
-        /* Audio sort order artist */
+        /* AudioInfo sort order artist */
         String AUDIO_ARTIST = MediaStore.Audio.Media.ARTIST;
 
-        /* Audio sort order album */
+        /* AudioInfo sort order album */
         String AUDIO_ALBUM = MediaStore.Audio.Media.ALBUM;
 
-        /* Audio sort order year */
+        /* AudioInfo sort order year */
         String AUDIO_YEAR = MediaStore.Audio.Media.YEAR + " DESC";
 
-        /* Audio sort order duration */
+        /* AudioInfo sort order duration */
         String AUDIO_DURATION = MediaStore.Audio.Media.DURATION + " DESC";
 
-        /* Audio sort order date */
+        /* AudioInfo sort order date */
         String AUDIO_DATE = MediaStore.Audio.Media.DATE_ADDED + " DESC";
 
-        /* Audio sort order filename */
+        /* AudioInfo sort order filename */
         String AUDIO_FILENAME = MediaStore.Audio.Media.DATA;
     }
 
@@ -97,7 +97,7 @@ public final class SortOrder {
         /* Album audio sort order duration */
         String AUDIO_DURATION = AudioSortOrder.AUDIO_DURATION;
 
-        /* Album Audio sort order year */
+        /* Album AudioInfo sort order year */
         String AUDIO_YEAR = MediaStore.Audio.Media.YEAR + " DESC";
 
         /* Album audio sort order filename */
@@ -150,62 +150,62 @@ public final class SortOrder {
     }
 
     /**
-     * Video sort order entries.
+     * VideoInfo sort order entries.
      */
     public interface VideoSortOrder {
-        /* Video sort order A-Z */
+        /* VideoInfo sort order A-Z */
         String VIDEO_A_Z = MediaStore.Video.Media.DEFAULT_SORT_ORDER;
 
-        /* Video sort order Z-A */
+        /* VideoInfo sort order Z-A */
         String VIDEO_Z_A = VIDEO_A_Z + " DESC";
 
-        /* Video sort order artist */
+        /* VideoInfo sort order artist */
         String VIDEO_ARTIST = MediaStore.Video.Media.ARTIST;
 
-        /* Video sort order album */
+        /* VideoInfo sort order album */
         String VIDEO_ALBUM = MediaStore.Video.Media.ALBUM;
 
-        /* Video sort order duration */
+        /* VideoInfo sort order duration */
         String VIDEO_DURATION = MediaStore.Video.Media.DURATION + " DESC";
 
-        /* Video sort order date */
+        /* VideoInfo sort order date */
         String VIDEO_DATE = MediaStore.Video.Media.DATE_ADDED + " DESC";
 
-        /* Video sort order filename */
+        /* VideoInfo sort order filename */
         String VIDEO_FILENAME = MediaStore.Video.Media.DATA;
     }
 
     /**
-     * File sort order entries.
+     * FileInfo sort order entries.
      */
     public interface FileSortOrder {
-        /* File sort order A-Z */
+        /* FileInfo sort order A-Z */
         String FILE_A_Z = MediaStore.Files.FileColumns.TITLE;
 
-        /* File sort order Z-A */
+        /* FileInfo sort order Z-A */
         String FILE_Z_A = FILE_A_Z + " DESC";
 
-        /* File sort order date */
+        /* FileInfo sort order date */
         String FILE_DATE = MediaStore.Files.FileColumns.DATE_ADDED + " DESC";
 
-        /* File sort order filename */
+        /* FileInfo sort order filename */
         String FILE_FILENAME = MediaStore.Files.FileColumns.DATA;
     }
 
     /**
-     * Image sort order entries.
+     * ImageInfo sort order entries.
      */
     public interface ImageSortOrder {
-        /* Image sort order A-Z */
+        /* ImageInfo sort order A-Z */
         String IMAGE_A_Z = MediaStore.Images.Media.DEFAULT_SORT_ORDER;
 
-        /* Image sort order Z-A */
+        /* ImageInfo sort order Z-A */
         String IMAGE_Z_A = IMAGE_A_Z + " DESC";
 
-        /* Image sort order date */
+        /* ImageInfo sort order date */
         String IMAGE_DATE = MediaStore.Images.Media.DATE_ADDED + " DESC";
 
-        /* Image sort order filename */
+        /* ImageInfo sort order filename */
         String IMAGE_FILENAME = MediaStore.Images.Media.DATA;
     }
 }

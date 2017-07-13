@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
-import com.reversecoder.content.helper.model.File;
+import com.reversecoder.content.helper.model.FileInfo;
 import com.reversecoder.content.helper.sort.SortOrder;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class FileLoader {
     private static final long[] sEmptyList = new long[0];
     private static final String CONTENT_URI_EXTERNAL = "internal";
 
-    public static ArrayList<File> getFilesForCursor(Cursor cursor) {
+    public static ArrayList<FileInfo> getFilesForCursor(Cursor cursor) {
         ArrayList arrayList = new ArrayList();
         if ((cursor != null) && (cursor.moveToFirst()))
             do {
@@ -30,7 +30,7 @@ public class FileLoader {
                 int size = cursor.getInt(3);
                 Uri uri = Uri.withAppendedPath(MediaStore.Files.getContentUri(CONTENT_URI_EXTERNAL), Long.toString(id));
 
-                arrayList.add(new File(id, mimeType, title, size, uri));
+                arrayList.add(new FileInfo(id, mimeType, title, size, uri));
             }
             while (cursor.moveToNext());
         if (cursor != null)
@@ -38,8 +38,8 @@ public class FileLoader {
         return arrayList;
     }
 
-    public static File getFileForCursor(Cursor cursor) {
-        File file = new File();
+    public static FileInfo getFileForCursor(Cursor cursor) {
+        FileInfo fileInfo = new FileInfo();
         if ((cursor != null) && (cursor.moveToFirst())) {
             long id = cursor.getLong(0);
             String mimeType = cursor.getString(1);
@@ -47,12 +47,12 @@ public class FileLoader {
             int size = cursor.getInt(3);
             Uri uri = Uri.withAppendedPath(MediaStore.Files.getContentUri(CONTENT_URI_EXTERNAL), Long.toString(id));
 
-            file = new File(id, mimeType, title, size, uri);
+            fileInfo = new FileInfo(id, mimeType, title, size, uri);
         }
 
         if (cursor != null)
             cursor.close();
-        return file;
+        return fileInfo;
     }
 
     public static final long[] getFileListForCursor(Cursor cursor) {
@@ -77,7 +77,7 @@ public class FileLoader {
         return list;
     }
 
-    public static File getFileFromPath(String filePath, Context context) {
+    public static FileInfo getFileFromPath(String filePath, Context context) {
         ContentResolver cr = context.getContentResolver();
 
         Uri uri = MediaStore.Files.getContentUri(CONTENT_URI_EXTERNAL);
@@ -93,13 +93,13 @@ public class FileLoader {
         Cursor cursor = cr.query(uri, projection, selection + "=?", selectionArgs, sortOrder);
 
         if (cursor != null && cursor.getCount() > 0) {
-            File file = getFileForCursor(cursor);
+            FileInfo fileInfo = getFileForCursor(cursor);
             cursor.close();
-            return file;
-        } else return new File();
+            return fileInfo;
+        } else return new FileInfo();
     }
 
-    public static ArrayList<File> getAllFiles(Context context) {
+    public static ArrayList<FileInfo> getAllFiles(Context context) {
         return getFilesForCursor(makeFileCursor(context, null, null));
     }
 
@@ -111,12 +111,12 @@ public class FileLoader {
         return getFileListForCursor(makeFileCursor(context, selection + " LIKE ?", whereArgs, null));
     }
 
-    public static File getFileForID(Context context, long id) {
+    public static FileInfo getFileForID(Context context, long id) {
         return getFileForCursor(makeFileCursor(context, "_id=" + String.valueOf(id), null));
     }
 
-    public static List<File> searchFiles(Context context, String searchString, int limit) {
-        ArrayList<File> result = getFilesForCursor(makeFileCursor(context, "title LIKE ?", new String[]{searchString + "%"}));
+    public static List<FileInfo> searchFiles(Context context, String searchString, int limit) {
+        ArrayList<FileInfo> result = getFilesForCursor(makeFileCursor(context, "title LIKE ?", new String[]{searchString + "%"}));
         if (result.size() < limit) {
             result.addAll(getFilesForCursor(makeFileCursor(context, "title LIKE ?", new String[]{"%_" + searchString + "%"})));
         }
@@ -144,10 +144,10 @@ public class FileLoader {
 
     }
 
-    public static File fileFromFile(String filePath) {
+    public static FileInfo fileFromFile(String filePath) {
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(filePath);
-        return new File(
+        return new FileInfo(
                 -1,
                 "",
                 "", 0, null

@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
-import com.reversecoder.content.helper.model.Image;
+import com.reversecoder.content.helper.model.ImageInfo;
 import com.reversecoder.content.helper.sort.SortOrder;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class ImageLoader {
 
     private static final long[] sEmptyList = new long[0];
 
-    public static ArrayList<Image> getImagesForCursor(Cursor cursor) {
+    public static ArrayList<ImageInfo> getImagesForCursor(Cursor cursor) {
         ArrayList arrayList = new ArrayList();
         if ((cursor != null) && (cursor.moveToFirst()))
             do {
@@ -31,7 +31,7 @@ public class ImageLoader {
                 int size=cursor.getInt(5);
                 Uri uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, Long.toString(id));
 
-                arrayList.add(new Image(id, title, dateTaken, dateAdded, dateModified,size,uri));
+                arrayList.add(new ImageInfo(id, title, dateTaken, dateAdded, dateModified,size,uri));
             }
             while (cursor.moveToNext());
         if (cursor != null)
@@ -39,8 +39,8 @@ public class ImageLoader {
         return arrayList;
     }
 
-    public static Image getImageForCursor(Cursor cursor) {
-        Image image = new Image();
+    public static ImageInfo getImageForCursor(Cursor cursor) {
+        ImageInfo imageInfo = new ImageInfo();
         if ((cursor != null) && (cursor.moveToFirst())) {
             long id = cursor.getLong(0);
             String title = cursor.getString(1);
@@ -50,12 +50,12 @@ public class ImageLoader {
             int size=cursor.getInt(5);
             Uri uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, Long.toString(id));
 
-            image = new Image(id, title, dateTaken, dateAdded, dateModified,size,uri);
+            imageInfo = new ImageInfo(id, title, dateTaken, dateAdded, dateModified,size,uri);
         }
 
         if (cursor != null)
             cursor.close();
-        return image;
+        return imageInfo;
     }
 
     public static final long[] getImageListForCursor(Cursor cursor) {
@@ -80,7 +80,7 @@ public class ImageLoader {
         return list;
     }
 
-    public static Image getImageFromPath(String imagePath, Context context) {
+    public static ImageInfo getImageFromPath(String imagePath, Context context) {
         ContentResolver cr = context.getContentResolver();
 
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -93,13 +93,13 @@ public class ImageLoader {
         Cursor cursor = cr.query(uri, projection, selection + "=?", selectionArgs, sortOrder);
 
         if (cursor != null && cursor.getCount() > 0) {
-            Image image = getImageForCursor(cursor);
+            ImageInfo imageInfo = getImageForCursor(cursor);
             cursor.close();
-            return image;
-        } else return new Image();
+            return imageInfo;
+        } else return new ImageInfo();
     }
 
-    public static ArrayList<Image> getAllImages(Context context) {
+    public static ArrayList<ImageInfo> getAllImages(Context context) {
         return getImagesForCursor(makeImageCursor(context, null, null));
     }
 
@@ -108,12 +108,12 @@ public class ImageLoader {
         return getImageListForCursor(makeImageCursor(context, MediaStore.Images.Media.DATA + " LIKE ?", whereArgs, null));
     }
 
-    public static Image getImageForID(Context context, long id) {
+    public static ImageInfo getImageForID(Context context, long id) {
         return getImageForCursor(makeImageCursor(context, "_id=" + String.valueOf(id), null));
     }
 
-    public static List<Image> searchImages(Context context, String searchString, int limit) {
-        ArrayList<Image> result = getImagesForCursor(makeImageCursor(context, "title LIKE ?", new String[]{searchString + "%"}));
+    public static List<ImageInfo> searchImages(Context context, String searchString, int limit) {
+        ArrayList<ImageInfo> result = getImagesForCursor(makeImageCursor(context, "title LIKE ?", new String[]{searchString + "%"}));
         if (result.size() < limit) {
             result.addAll(getImagesForCursor(makeImageCursor(context, "title LIKE ?", new String[]{"%_" + searchString + "%"})));
         }
@@ -137,10 +137,10 @@ public class ImageLoader {
 
     }
 
-    public static Image imageFromFile(String filePath) {
+    public static ImageInfo imageFromFile(String filePath) {
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(filePath);
-        return new Image(
+        return new ImageInfo(
                 -1,
                 mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),"","","",0,null
         );

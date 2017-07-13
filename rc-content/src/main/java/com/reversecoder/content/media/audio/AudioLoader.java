@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
-import com.reversecoder.content.helper.model.Audio;
+import com.reversecoder.content.helper.model.AudioInfo;
 import com.reversecoder.content.helper.sort.SortOrder;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class AudioLoader {
 
     private static final long[] sEmptyList = new long[0];
 
-    public static ArrayList<Audio> getAudiosForCursor(Cursor cursor) {
+    public static ArrayList<AudioInfo> getAudiosForCursor(Cursor cursor) {
         ArrayList arrayList = new ArrayList();
         if ((cursor != null) && (cursor.moveToFirst()))
             do {
@@ -36,7 +36,7 @@ public class AudioLoader {
                 int size = cursor.getInt(8);
                 Uri uri = Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.toString(id));
 
-                arrayList.add(new Audio(id, albumId, artistId, title, artist, album, durationInSecs, trackNumber, size,uri));
+                arrayList.add(new AudioInfo(id, albumId, artistId, title, artist, album, durationInSecs, trackNumber, size,uri));
             }
             while (cursor.moveToNext());
         if (cursor != null)
@@ -44,8 +44,8 @@ public class AudioLoader {
         return arrayList;
     }
 
-    public static Audio getAudioForCursor(Cursor cursor) {
-        Audio audio = new Audio();
+    public static AudioInfo getAudioForCursor(Cursor cursor) {
+        AudioInfo audioInfo = new AudioInfo();
         if ((cursor != null) && (cursor.moveToFirst())) {
             long id = cursor.getLong(0);
             String title = cursor.getString(1);
@@ -60,12 +60,12 @@ public class AudioLoader {
             int size = cursor.getInt(8);
             Uri uri = Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.toString(id));
 
-            audio = new Audio(id, albumId, artistId, title, album, artist, durationInSecs, trackNumber, size,uri);
+            audioInfo = new AudioInfo(id, albumId, artistId, title, album, artist, durationInSecs, trackNumber, size,uri);
         }
 
         if (cursor != null)
             cursor.close();
-        return audio;
+        return audioInfo;
     }
 
     public static final long[] getAudioListForCursor(Cursor cursor) {
@@ -90,7 +90,7 @@ public class AudioLoader {
         return list;
     }
 
-    public static Audio getAudioFromPath(String audioPath, Context context) {
+    public static AudioInfo getAudioFromPath(String audioPath, Context context) {
         ContentResolver cr = context.getContentResolver();
 
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -103,13 +103,13 @@ public class AudioLoader {
         Cursor cursor = cr.query(uri, projection, selection + "=?", selectionArgs, sortOrder);
 
         if (cursor != null && cursor.getCount() > 0) {
-            Audio audio = getAudioForCursor(cursor);
+            AudioInfo audioInfo = getAudioForCursor(cursor);
             cursor.close();
-            return audio;
-        } else return new Audio();
+            return audioInfo;
+        } else return new AudioInfo();
     }
 
-    public static ArrayList<Audio> getAllAudios(Context context) {
+    public static ArrayList<AudioInfo> getAllAudios(Context context) {
         return getAudiosForCursor(makeAudioCursor(context, null, null));
     }
 
@@ -118,12 +118,12 @@ public class AudioLoader {
         return getAudioListForCursor(makeAudioCursor(context, MediaStore.Audio.Media.DATA + " LIKE ?", whereArgs, null));
     }
 
-    public static Audio getAudioForID(Context context, long id) {
+    public static AudioInfo getAudioForID(Context context, long id) {
         return getAudioForCursor(makeAudioCursor(context, "_id=" + String.valueOf(id), null));
     }
 
-    public static List<Audio> searchAudios(Context context, String searchString, int limit) {
-        ArrayList<Audio> result = getAudiosForCursor(makeAudioCursor(context, "title LIKE ?", new String[]{searchString + "%"}));
+    public static List<AudioInfo> searchAudios(Context context, String searchString, int limit) {
+        ArrayList<AudioInfo> result = getAudiosForCursor(makeAudioCursor(context, "title LIKE ?", new String[]{searchString + "%"}));
         if (result.size() < limit) {
             result.addAll(getAudiosForCursor(makeAudioCursor(context, "title LIKE ?", new String[]{"%_" + searchString + "%"})));
         }
@@ -147,10 +147,10 @@ public class AudioLoader {
 
     }
 
-    public static Audio audioFromFile(String filePath) {
+    public static AudioInfo audioFromFile(String filePath) {
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(filePath);
-        return new Audio(
+        return new AudioInfo(
                 -1,
                 -1,
                 -1,

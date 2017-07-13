@@ -7,7 +7,7 @@ import android.widget.ListView;
 
 import com.reversecoder.content.demo.R;
 import com.reversecoder.content.demo.adapter.StorageAdapter;
-import com.reversecoder.content.helper.model.File;
+import com.reversecoder.content.helper.model.FileInfo;
 import com.reversecoder.content.helper.util.StorageManager;
 import com.reversecoder.content.nonmedia.file.FileLoader;
 
@@ -30,27 +30,28 @@ public class OthersActivity extends AppCompatActivity {
 
     private void initUI() {
 
-        lvStorage= (ListView)findViewById(R.id.lv_storage);
+        lvStorage = (ListView) findViewById(R.id.lv_storage);
 
         storageListViewAdapter = new StorageAdapter(OthersActivity.this, StorageAdapter.ADAPTER_TYPE.OTHER);
         lvStorage.setAdapter(storageListViewAdapter);
         storageListViewAdapter.setData(getAllFiles());
     }
 
-    private ArrayList<File> getAllFiles() {
-        ArrayList<File> allFiles = new ArrayList<File>();
-        ArrayList<File> allFileLoaderFile = FileLoader.getAllFiles(OthersActivity.this);
-        allFiles.addAll(allFileLoaderFile);
+    private ArrayList<FileInfo> getAllFiles() {
+        ArrayList<FileInfo> allFileInfos = new ArrayList<FileInfo>();
+        ArrayList<FileInfo> allFileLoaderFileInfo = FileLoader.getAllFiles(OthersActivity.this);
+        allFileInfos.addAll(allFileLoaderFileInfo);
 
-        ArrayList<java.io.File> withoutFileLoaderFile= StorageManager.getInstance().getAllFilesFromExternalSdCard(Environment.getExternalStorageDirectory(), StorageManager.FileType.DOCUMENT);
-        File file;
-        for(int i=0;i<withoutFileLoaderFile.size();i++){
-            file = new File();
-            file.setTitle(withoutFileLoaderFile.get(i).getName());
-            file.setPath(withoutFileLoaderFile.get(i).getAbsolutePath());
-            allFiles.add(file);
+        ArrayList<java.io.File> withoutFileLoaderFile = StorageManager.getInstance().getAllFilesFromExternalSdCard(Environment.getExternalStorageDirectory(), StorageManager.FileType.DOCUMENT);
+        FileInfo fileInfo;
+        for (int i = 0; i < withoutFileLoaderFile.size(); i++) {
+            fileInfo = new FileInfo();
+            fileInfo.setTitle(withoutFileLoaderFile.get(i).getName());
+            fileInfo.setPath(withoutFileLoaderFile.get(i).getAbsolutePath());
+            fileInfo.setSize((int) withoutFileLoaderFile.get(i).length());
+            allFileInfos.add(fileInfo);
         }
 
-        return allFiles;
+        return allFileInfos;
     }
 }

@@ -4,24 +4,16 @@ import android.net.Uri;
 
 import com.reversecoder.content.helper.util.AppUtil;
 
-public class File extends WrapperBase {
+public class FileInfo extends WrapperBase {
 
-    private final long id;
-    private final String mimeType;
-    private String title;
-    private String path="";
-    private final int size;
-    private final Uri uri;
+    private long id = -1;
+    private String mimeType = "";
+    private String title = "";
+    private String path = "";
+    private int size = -1;
+    private Uri uri = null;
 
-    public File() {
-        this.id = -1;
-        this.title = "";
-        this.mimeType = "";
-        this.size = -1;
-        this.uri = null;
-    }
-
-    public File(long id, String mimeType, String title, int size, Uri uri) {
+    public FileInfo(long id, String mimeType, String title, int size, Uri uri) {
         this.id = id;
         this.mimeType = mimeType;
         this.title = title;
@@ -29,13 +21,23 @@ public class File extends WrapperBase {
         this.uri = uri;
     }
 
+    public FileInfo() {
+    }
 
     public long getId() {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getMimeType() {
         return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 
     public String getTitle() {
@@ -46,32 +48,41 @@ public class File extends WrapperBase {
         this.title = title;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-
     public String getPath() {
         return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public int getSize() {
         return size;
     }
 
-    public String getReadableSize() {
-        return AppUtil.getReadableFileSize(size);
+    public void setSize(int size) {
+        this.size = size;
     }
 
     public Uri getUri() {
         return uri;
     }
 
+    public void setUri(Uri uri) {
+        this.uri = uri;
+    }
+
+    public String getReadableSize() {
+        return AppUtil.getReadableFileSize(size);
+    }
+
     @Override
     public String toString() {
-        return "File{" +
+        return "FileInfo{" +
                 "id=" + id +
                 ", mimeType='" + mimeType + '\'' +
                 ", title='" + title + '\'' +
+                ", path='" + path + '\'' +
                 ", size=" + getReadableSize() +
                 ", uri=" + uri +
                 '}';

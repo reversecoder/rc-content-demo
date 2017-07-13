@@ -4,7 +4,7 @@ import android.net.Uri;
 
 import com.reversecoder.content.helper.util.AppUtil;
 
-public class Video extends WrapperBase {
+public class VideoInfo extends WrapperBase {
 
     private final String albumName;
     private final String artistName;
@@ -14,7 +14,7 @@ public class Video extends WrapperBase {
     private final int size;
     private final Uri uri;
 
-    public Video() {
+    public VideoInfo() {
         this.id = -1;
         this.title = "";
         this.albumName = "";
@@ -24,7 +24,7 @@ public class Video extends WrapperBase {
         uri = null;
     }
 
-    public Video(long _id, String _title, String _albumName, String _artistName, int _duration, int size, Uri uri) {
+    public VideoInfo(long _id, String _title, String _albumName, String _artistName, int _duration, int size, Uri uri) {
         this.id = _id;
         this.title = _title;
         this.albumName = _albumName;
@@ -68,7 +68,7 @@ public class Video extends WrapperBase {
 
     @Override
     public String toString() {
-        return "Video{" +
+        return "VideoInfo{" +
                 "albumName='" + albumName + '\'' +
                 ", artistName='" + artistName + '\'' +
                 ", duration=" + duration +

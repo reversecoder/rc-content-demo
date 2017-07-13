@@ -42,28 +42,28 @@ public class MainActivity extends AppCompatActivity {
         });
 
 //        sdCardContent=sdCardContent+"\n\n\n"+"Audios:\n\n\n";
-//        ArrayList<Audio> audios = AudioLoader.getAllAudios(MainActivity.this);
+//        ArrayList<AudioInfo> audios = AudioLoader.getAllAudios(MainActivity.this);
 //        for(int i = 0; i< audios.size(); i++){
 //            sdCardContent = sdCardContent+(i+1)+". "+audios.get(i).toString()+"\n\n";
 //            Log.d(TAG+"-audio: ", (i+1)+". "+audios.get(i).toString());
 //        }
 //
 //        sdCardContent=sdCardContent+"\n\n\n"+"Videos:\n\n\n";
-//        ArrayList<Video> videos = VideoLoader.getAllVideos(MainActivity.this);
+//        ArrayList<VideoInfo> videos = VideoLoader.getAllVideos(MainActivity.this);
 //        for(int i = 0; i< videos.size(); i++){
 //            sdCardContent = sdCardContent+(i+1)+". "+videos.get(i).toString()+"\n\n";
 //            Log.d(TAG+"-video: ", (i+1)+". "+videos.get(i).toString());
 //        }
 //
 //        sdCardContent=sdCardContent+"\n\n\n"+"Images:\n\n\n";
-//        ArrayList<Image> images = ImageLoader.getAllImages(MainActivity.this);
+//        ArrayList<ImageInfo> images = ImageLoader.getAllImages(MainActivity.this);
 //        for(int i = 0; i< images.size(); i++){
 //            sdCardContent = sdCardContent+(i+1)+". "+images.get(i).toString()+"\n\n";
 //            Log.d(TAG+"-image: ", (i+1)+". "+images.get(i).toString());
 //        }
 //
 //        sdCardContent=sdCardContent+"\n\n\n"+"Files:\n\n\n";
-//        ArrayList<File> files = FileLoader.getAllFiles(MainActivity.this);
+//        ArrayList<FileInfo> files = FileLoader.getAllFiles(MainActivity.this);
 //        for(int i = 0; i< files.size(); i++){
 //            sdCardContent = sdCardContent+(i+1)+". "+files.get(i).toString()+"\n\n";
 //            Log.d(TAG+"-file: ", (i+1)+". "+files.get(i).toString());

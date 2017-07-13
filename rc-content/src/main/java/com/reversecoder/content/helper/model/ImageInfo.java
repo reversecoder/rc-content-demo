@@ -4,7 +4,7 @@ import android.net.Uri;
 
 import com.reversecoder.content.helper.util.AppUtil;
 
-public class Image extends WrapperBase {
+public class ImageInfo extends WrapperBase {
 
     private final long id;
     private final String title;
@@ -14,7 +14,7 @@ public class Image extends WrapperBase {
     private final int size;
     private final Uri uri;
 
-    public Image() {
+    public ImageInfo() {
         this.id = -1;
         this.title = "";
         this.dateTaken = "";
@@ -24,7 +24,7 @@ public class Image extends WrapperBase {
         uri = null;
     }
 
-    public Image(long _id, String _title, String date_taken, String date_added, String date_modified, int size, Uri uri) {
+    public ImageInfo(long _id, String _title, String date_taken, String date_added, String date_modified, int size, Uri uri) {
         this.id = _id;
         this.title = _title;
         this.dateTaken = date_taken;
@@ -68,7 +68,7 @@ public class Image extends WrapperBase {
 
     @Override
     public String toString() {
-        return "Image{" +
+        return "ImageInfo{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", dateTaken='" + dateTaken + '\'' +

@@ -1,5 +1,10 @@
 package com.reversecoder.content.helper.util;
 
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+
 import java.text.DecimalFormat;
 
 public class AppUtil {
@@ -35,4 +40,17 @@ public class AppUtil {
         return String.valueOf(dec.format(fileSize) + suffix);
     }
 
+    public static Uri getApplicationIconUri(ApplicationInfo appInfo) {
+        Uri uri = null;
+        if (appInfo.icon != 0) {
+            uri = Uri.parse("android.resource://" + appInfo.packageName + "/" + appInfo.icon);
+        }
+        return uri;
+    }
+
+    public static String getApplicationLabel(Context context, ApplicationInfo info) {
+        PackageManager packageManager = context.getPackageManager();
+        String label = packageManager.getApplicationLabel(info).toString();
+        return label;
+    }
 }

@@ -13,13 +13,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.reversecoder.content.demo.R;
-import com.reversecoder.content.helper.model.Application;
-import com.reversecoder.content.helper.model.Audio;
-import com.reversecoder.content.helper.model.File;
-import com.reversecoder.content.helper.model.Image;
-import com.reversecoder.content.helper.model.Video;
+import com.reversecoder.content.helper.model.AppInfo;
+import com.reversecoder.content.helper.model.AudioInfo;
+import com.reversecoder.content.helper.model.FileInfo;
+import com.reversecoder.content.helper.model.ImageInfo;
+import com.reversecoder.content.helper.model.VideoInfo;
 import com.reversecoder.content.helper.model.WrapperBase;
-import com.reversecoder.content.helper.util.RealPathUtils;
+import com.reversecoder.content.helper.util.AppUtil;
 
 import java.util.ArrayList;
 
@@ -85,11 +85,11 @@ public class StorageAdapter<T> extends BaseAdapter {
             if (convertView == null)
                 vi = inflater.inflate(R.layout.grid_row_storage, null);
 
-            Image image = (Image) mItem;
+            ImageInfo imageInfo = (ImageInfo) mItem;
             ImageView ivDefaultIcon = (ImageView) vi.findViewById(R.id.iv_default_icon);
             Glide
                     .with(mActivity)
-                    .load(image.getUri())
+                    .load(imageInfo.getUri())
                     .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC))
                     .into(ivDefaultIcon);
         } else {
@@ -102,30 +102,25 @@ public class StorageAdapter<T> extends BaseAdapter {
             TextView tvSubTitle = (TextView) vi.findViewById(R.id.tv_subitle);
 
             if (mAdapterType == ADAPTER_TYPE.MUSIC) {
-                Audio audio = (Audio) mItem;
+                AudioInfo audioInfo = (AudioInfo) mItem;
                 ivDefaultIcon.setBackgroundResource(R.drawable.music_default);
-                tvTitle.setText(audio.getTitle());
-                tvSubTitle.setText(audio.getReadableSize());
+                tvTitle.setText(audioInfo.getTitle());
+                tvSubTitle.setText(audioInfo.getReadableSize());
             } else if (mAdapterType == ADAPTER_TYPE.MOVIE) {
-                Video video = (Video) mItem;
+                VideoInfo videoInfo = (VideoInfo) mItem;
                 ivDefaultIcon.setBackgroundResource(R.drawable.movie_default);
-                tvTitle.setText(video.getTitle());
-                tvSubTitle.setText(video.getReadableSize());
+                tvTitle.setText(videoInfo.getTitle());
+                tvSubTitle.setText(videoInfo.getReadableSize());
             } else if (mAdapterType == ADAPTER_TYPE.APPLICATION) {
-                Application application = (Application) mItem;
-                ivDefaultIcon.setBackgroundResource(R.drawable.application_default);
-                tvTitle.setText(application.getTitle());
-//                tvSubTitle.setText(video.getReadableSize());
+                AppInfo appInfo = (AppInfo) mItem;
+                ivDefaultIcon.setImageDrawable(appInfo.getIcon());
+                tvTitle.setText(appInfo.getAppName());
+                tvSubTitle.setText(AppUtil.getReadableFileSize((int) appInfo.getApkSize()));
             } else if (mAdapterType == ADAPTER_TYPE.OTHER) {
-                File other = (File) mItem;
+                FileInfo other = (FileInfo) mItem;
                 ivDefaultIcon.setBackgroundResource(R.drawable.file_default);
                 tvTitle.setText(other.getTitle());
-                tvSubTitle.setText(other.getPath());
-//                try {
-//                    tvSubTitle.setText(RealPathUtils.getPath(mActivity,other.getUri()));
-//                }catch (Exception ex){
-//                    ex.printStackTrace();
-//                }
+                tvSubTitle.setText(AppUtil.getReadableFileSize(other.getSize()));
             }
         }
 

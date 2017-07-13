@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 
-import com.reversecoder.content.helper.model.Video;
+import com.reversecoder.content.helper.model.VideoInfo;
 import com.reversecoder.content.helper.sort.SortOrder;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class VideoLoader {
 
     private static final long[] sEmptyList = new long[0];
 
-    public static ArrayList<Video> getVideosForCursor(Cursor cursor) {
+    public static ArrayList<VideoInfo> getVideosForCursor(Cursor cursor) {
         ArrayList arrayList = new ArrayList();
         if ((cursor != null) && (cursor.moveToFirst()))
             do {
@@ -33,7 +33,7 @@ public class VideoLoader {
                 int size=cursor.getInt(5);
                 Uri uri = Uri.withAppendedPath(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, Long.toString(id));
 
-                arrayList.add(new Video(id, title, artist, album, durationInSecs,size,uri));
+                arrayList.add(new VideoInfo(id, title, artist, album, durationInSecs,size,uri));
             }
             while (cursor.moveToNext());
         if (cursor != null)
@@ -41,8 +41,8 @@ public class VideoLoader {
         return arrayList;
     }
 
-    public static Video getVideoForCursor(Cursor cursor) {
-        Video video = new Video();
+    public static VideoInfo getVideoForCursor(Cursor cursor) {
+        VideoInfo videoInfo = new VideoInfo();
         if ((cursor != null) && (cursor.moveToFirst())) {
             long id = cursor.getLong(0);
             String title = cursor.getString(1);
@@ -55,12 +55,12 @@ public class VideoLoader {
             Uri uri = Uri.withAppendedPath(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, Long.toString(id));
 
 
-            video = new Video(id, title, album, artist, durationInSecs,size,uri);
+            videoInfo = new VideoInfo(id, title, album, artist, durationInSecs,size,uri);
         }
 
         if (cursor != null)
             cursor.close();
-        return video;
+        return videoInfo;
     }
 
     public static final long[] getVideoListForCursor(Cursor cursor) {
@@ -85,7 +85,7 @@ public class VideoLoader {
         return list;
     }
 
-    public static Video getVideoFromPath(String videoPath, Context context) {
+    public static VideoInfo getVideoFromPath(String videoPath, Context context) {
         ContentResolver cr = context.getContentResolver();
 
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
@@ -98,13 +98,13 @@ public class VideoLoader {
         Cursor cursor = cr.query(uri, projection, selection + "=?", selectionArgs, sortOrder);
 
         if (cursor != null && cursor.getCount() > 0) {
-            Video video = getVideoForCursor(cursor);
+            VideoInfo videoInfo = getVideoForCursor(cursor);
             cursor.close();
-            return video;
-        } else return new Video();
+            return videoInfo;
+        } else return new VideoInfo();
     }
 
-    public static ArrayList<Video> getAllVideos(Context context) {
+    public static ArrayList<VideoInfo> getAllVideos(Context context) {
         return getVideosForCursor(makeVideoCursor(context, null, null));
     }
 
@@ -113,12 +113,12 @@ public class VideoLoader {
         return getVideoListForCursor(makeVideoCursor(context, MediaStore.Video.Media.DATA + " LIKE ?", whereArgs, null));
     }
 
-    public static Video getVideoForID(Context context, long id) {
+    public static VideoInfo getVideoForID(Context context, long id) {
         return getVideoForCursor(makeVideoCursor(context, "_id=" + String.valueOf(id), null));
     }
 
-    public static List<Video> searchVideos(Context context, String searchString, int limit) {
-        ArrayList<Video> result = getVideosForCursor(makeVideoCursor(context, "title LIKE ?", new String[]{searchString + "%"}));
+    public static List<VideoInfo> searchVideos(Context context, String searchString, int limit) {
+        ArrayList<VideoInfo> result = getVideosForCursor(makeVideoCursor(context, "title LIKE ?", new String[]{searchString + "%"}));
         if (result.size() < limit) {
             result.addAll(getVideosForCursor(makeVideoCursor(context, "title LIKE ?", new String[]{"%_" + searchString + "%"})));
         }
@@ -142,10 +142,10 @@ public class VideoLoader {
 
     }
 
-    public static Video videoFromFile(String filePath) {
+    public static VideoInfo videoFromFile(String filePath) {
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(filePath);
-        return new Video(
+        return new VideoInfo(
                 -1,
                 mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),
                 mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),

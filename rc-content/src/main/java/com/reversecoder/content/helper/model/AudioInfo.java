@@ -4,7 +4,7 @@ import android.net.Uri;
 
 import com.reversecoder.content.helper.util.AppUtil;
 
-public class Audio extends WrapperBase {
+public class AudioInfo extends WrapperBase {
 
     private final long albumId;
     private final String albumName;
@@ -17,7 +17,7 @@ public class Audio extends WrapperBase {
     private final int size;
     private final Uri uri;
 
-    public Audio() {
+    public AudioInfo() {
         this.id = -1;
         this.albumId = -1;
         this.artistId = -1;
@@ -30,7 +30,7 @@ public class Audio extends WrapperBase {
         this.uri = null;
     }
 
-    public Audio(long _id, long _albumId, long _artistId, String _title, String _albumName, String _artistName, int _duration, int _trackNumber, int size, Uri uri) {
+    public AudioInfo(long _id, long _albumId, long _artistId, String _title, String _albumName, String _artistName, int _duration, int _trackNumber, int size, Uri uri) {
         this.id = _id;
         this.albumId = _albumId;
         this.artistId = _artistId;
@@ -89,7 +89,7 @@ public class Audio extends WrapperBase {
 
     @Override
     public String toString() {
-        return "Audio{" +
+        return "AudioInfo{" +
                 "albumId=" + albumId +
                 ", albumName='" + albumName + '\'' +
                 ", artistId=" + artistId +
