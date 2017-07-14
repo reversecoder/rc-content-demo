@@ -13,8 +13,7 @@ import static com.reversecoder.content.demo.activity.StorageManagementActivity.a
  * @author Md. Rashadul Alam
  */
 public class PictureActivity extends AppCompatActivity {
-
-
+    
     GridView gvStorage;
     StorageAdapter storageGridViewAdapter;
 

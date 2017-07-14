@@ -1,9 +1,14 @@
 package com.reversecoder.content.demo.activity;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
+import android.support.v7.widget.SearchView;
 import android.util.SparseBooleanArray;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,6 +17,8 @@ import android.widget.Toast;
 import com.reversecoder.content.demo.R;
 import com.reversecoder.content.demo.adapter.StorageAdapter;
 import com.reversecoder.content.demo.toolbar.ToolbarActionModeCallback;
+import com.reversecoder.content.helper.model.AudioInfo;
+import com.reversecoder.content.helper.util.AppUtil;
 
 import static com.reversecoder.content.demo.activity.StorageManagementActivity.allMusics;
 
@@ -25,6 +32,9 @@ public class MusicActivity extends AppCompatActivity {
 
     //Action Mode for toolbar
     private ActionMode mActionMode;
+    //SearchView
+    private SearchView searchView;
+    private MenuItem searchMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +73,9 @@ public class MusicActivity extends AppCompatActivity {
         });
     }
 
+    /**********************************
+     * Methods for toolbar action mode
+     **********************************/
     //List item select method
     private void onListItemSelect(int position) {
         storageListViewAdapter.toggleSelection(position);//Toggle the selection
@@ -90,26 +103,67 @@ public class MusicActivity extends AppCompatActivity {
             mActionMode = null;
     }
 
-
     //Delete selected rows
     public void deleteRows() {
-        SparseBooleanArray selected = storageListViewAdapter
-                .getSelectedIds();//Get selected ids
+        SparseBooleanArray selected = storageListViewAdapter.getSelectedIds();//Get selected ids
+
+        long freedSpace=0;
+        AudioInfo audioInfo;
+        for(int i=0;i<selected.size();i++){
+            audioInfo = (AudioInfo)storageListViewAdapter.getItem(selected.keyAt(i));
+            freedSpace=freedSpace+audioInfo.getSize();
+        }
 
         //Loop all selected ids
         for (int i = (selected.size() - 1); i >= 0; i--) {
             if (selected.valueAt(i)) {
                 //If current id is selected remove the item via key
-                /************************
-                 * Need to delete from adapter
-                 ************************/
-//                item_models.remove(selected.keyAt(i));
-//                storageListViewAdapter.notifyDataSetChanged();//notify adapter
-
+                storageListViewAdapter.removeItem(selected.keyAt(i));
             }
         }
-        Toast.makeText(MusicActivity.this, selected.size() + " item deleted.", Toast.LENGTH_SHORT).show();//Show Toast
-        mActionMode.finish();//Finish action mode after use
 
+//        Toast.makeText(MusicActivity.this, selected.size() + " item deleted.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MusicActivity.this, AppUtil.getReadableFileSize((int)freedSpace)+" deleted.", Toast.LENGTH_SHORT).show();
+        mActionMode.finish();//Finish action mode after use
+    }
+
+    /**************************
+     * Methods for option menu
+     **************************/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);//Menu Resource, Menu
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchMenuItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) searchMenuItem.getActionView();
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(false);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                storageListViewAdapter.getFilter().filter(newText);
+                return true;
+            }
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

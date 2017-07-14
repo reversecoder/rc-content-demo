@@ -8,4 +8,10 @@
     <string name="title_activity_movies">Movies</string>
     <string name="title_activity_applications">Applications</string>
     <string name="title_activity_others">Others</string>
+
+    <!-- Dialog message -->
+    <string name="dialog_attention">Attention</string>
+    <string name="dialog_message">Do you want to delete the selected items?</string>
+    <string name="dialog_button_ok">OK</string>
+    <string name="dialog_button_cancel">Cancel</string>
 </resources>
