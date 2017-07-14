@@ -91,10 +91,7 @@ public class MusicActivity extends AppCompatActivity {
 
         if (mActionMode != null)
             //set action mode title on item selection
-            mActionMode.setTitle(String.valueOf(storageListViewAdapter
-                    .getSelectedCount()) + " selected");
-
-
+            mActionMode.setTitle(String.valueOf(storageListViewAdapter .getSelectedCount()) + " selected");
     }
 
     //Set action mode null after use
@@ -117,6 +114,8 @@ public class MusicActivity extends AppCompatActivity {
         //Loop all selected ids
         for (int i = (selected.size() - 1); i >= 0; i--) {
             if (selected.valueAt(i)) {
+                //delete from sdcard
+                AppUtil.deleteFile(MusicActivity.this, ((AudioInfo) storageListViewAdapter.getItem(selected.keyAt(i))).getUri());
                 //If current id is selected remove the item via key
                 storageListViewAdapter.removeItem(selected.keyAt(i));
             }

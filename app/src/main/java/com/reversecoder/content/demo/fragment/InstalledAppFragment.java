@@ -1,34 +1,36 @@
-package com.reversecoder.content.demo.activity;
+package com.reversecoder.content.demo.fragment;
 
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.SearchView;
 import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.reversecoder.content.demo.R;
 import com.reversecoder.content.demo.adapter.StorageAdapter;
 import com.reversecoder.content.demo.toolbar.ToolbarActionModeCallback;
-import com.reversecoder.content.helper.model.ImageInfo;
+import com.reversecoder.content.helper.model.AppInfo;
 import com.reversecoder.content.helper.util.AppUtil;
 
-import static com.reversecoder.content.demo.activity.StorageManagementActivity.allImages;
+import static com.reversecoder.content.demo.activity.StorageManagementActivity.allInstalledApplications;
 
-/**
- * @author Md. Rashadul Alam
- */
-public class PictureActivity extends AppCompatActivity {
+public class InstalledAppFragment extends Fragment {
 
-    GridView gvStorage;
-    StorageAdapter storageGridViewAdapter;
+    private View parentView;
+    ListView lvStorage;
+    StorageAdapter storageListViewAdapter;
 
     //Action Mode for toolbar
     private ActionMode mActionMode;
@@ -36,24 +38,36 @@ public class PictureActivity extends AppCompatActivity {
     private SearchView searchView;
     private MenuItem searchMenuItem;
 
+    public static InstalledAppFragment newInstance() {
+        return new InstalledAppFragment();
+    }
+
+    public InstalledAppFragment() {
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_storage_gridview);
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstaceState) {
+        parentView = (View) inflater.inflate(R.layout.fragment_storage_listview, parent, false);
+
+        setHasOptionsMenu(true);
+
         initUI();
         initActions();
+
+        return parentView;
     }
 
     private void initUI() {
-        gvStorage = (GridView) findViewById(R.id.gv_storage);
 
-        storageGridViewAdapter = new StorageAdapter(PictureActivity.this, StorageAdapter.ADAPTER_TYPE.PICTURE);
-        gvStorage.setAdapter(storageGridViewAdapter);
-        storageGridViewAdapter.setData(allImages);
+        lvStorage = (ListView) parentView.findViewById(R.id.lv_storage);
+
+        storageListViewAdapter = new StorageAdapter(getActivity(), StorageAdapter.ADAPTER_TYPE.APPLICATION);
+        lvStorage.setAdapter(storageListViewAdapter);
+        storageListViewAdapter.setData(allInstalledApplications);
     }
 
     private void initActions() {
-        gvStorage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvStorage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //If ActionMode not null select item
@@ -62,11 +76,10 @@ public class PictureActivity extends AppCompatActivity {
             }
         });
 
-        gvStorage.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lvStorage.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 //Select item on long click
-                storageGridViewAdapter.showCheckBox(true);
                 onListItemSelect(position);
                 return true;
             }
@@ -78,53 +91,49 @@ public class PictureActivity extends AppCompatActivity {
      **********************************/
     //List item select method
     private void onListItemSelect(int position) {
-        storageGridViewAdapter.toggleSelection(position);//Toggle the selection
+        storageListViewAdapter.toggleSelection(position);//Toggle the selection
 
-        boolean hasCheckedItems = storageGridViewAdapter.getSelectedCount() > 0;//Check if any items are already selected or not
+        boolean hasCheckedItems = storageListViewAdapter.getSelectedCount() > 0;//Check if any items are already selected or not
 
         if (hasCheckedItems && mActionMode == null)
             // there are some selected items, start the actionMode
-            mActionMode = startSupportActionMode(new ToolbarActionModeCallback(PictureActivity.this, storageGridViewAdapter, allImages));
+            mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(new ToolbarActionModeCallback(getActivity(), storageListViewAdapter, allInstalledApplications, true));
         else if (!hasCheckedItems && mActionMode != null)
             // there no selected items, finish the actionMode
             mActionMode.finish();
 
         if (mActionMode != null)
             //set action mode title on item selection
-            mActionMode.setTitle(String.valueOf(storageGridViewAdapter.getSelectedCount()) + " selected");
+            mActionMode.setTitle(String.valueOf(storageListViewAdapter.getSelectedCount()) + " selected");
     }
 
     //Set action mode null after use
     public void setNullToActionMode() {
-        if (mActionMode != null) {
+        if (mActionMode != null)
             mActionMode = null;
-            storageGridViewAdapter.showCheckBox(false);
-        }
     }
 
     //Delete selected rows
     public void deleteRows() {
-        SparseBooleanArray selected = storageGridViewAdapter.getSelectedIds();//Get selected ids
+        SparseBooleanArray selected = storageListViewAdapter.getSelectedIds();//Get selected ids
 
         long freedSpace = 0;
-        ImageInfo imageInfo;
+        AppInfo appInfo;
         for (int i = 0; i < selected.size(); i++) {
-            imageInfo = (ImageInfo) storageGridViewAdapter.getItem(selected.keyAt(i));
-            freedSpace = freedSpace + imageInfo.getSize();
+            appInfo = (AppInfo) storageListViewAdapter.getItem(selected.keyAt(i));
+            freedSpace = freedSpace + appInfo.getApkSize();
         }
 
         //Loop all selected ids
         for (int i = (selected.size() - 1); i >= 0; i--) {
             if (selected.valueAt(i)) {
-                //delete from sdcard
-                AppUtil.deleteFile(PictureActivity.this, ((ImageInfo) storageGridViewAdapter.getItem(selected.keyAt(i))).getUri());
                 //If current id is selected remove the item via key
-                storageGridViewAdapter.removeItem(selected.keyAt(i));
+                storageListViewAdapter.removeItem(selected.keyAt(i));
             }
         }
 
 //        Toast.makeText(MusicActivity.this, selected.size() + " item deleted.", Toast.LENGTH_SHORT).show();
-        Toast.makeText(PictureActivity.this, AppUtil.getReadableFileSize((int) freedSpace) + " deleted.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), AppUtil.getReadableFileSize((int) freedSpace) + " deleted.", Toast.LENGTH_SHORT).show();
         mActionMode.finish();//Finish action mode after use
     }
 
@@ -132,15 +141,15 @@ public class PictureActivity extends AppCompatActivity {
      * Methods for option menu
      **************************/
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);//Menu Resource, Menu
+        inflater.inflate(R.menu.menu_main, menu);//Menu Resource, Menu
 
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchMenuItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) searchMenuItem.getActionView();
 
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setSubmitButtonEnabled(false);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -150,12 +159,10 @@ public class PictureActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                storageGridViewAdapter.getFilter().filter(newText);
+                storageListViewAdapter.getFilter().filter(newText);
                 return true;
             }
         });
-
-        return true;
     }
 
     @Override
@@ -168,3 +175,4 @@ public class PictureActivity extends AppCompatActivity {
         }
     }
 }
+

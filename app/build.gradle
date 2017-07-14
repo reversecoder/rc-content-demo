@@ -39,6 +39,7 @@ dependencies {
     })
 
     compile "com.android.support:appcompat-v7:$supportlibraryVersion"
+    compile "com.android.support:design:$supportlibraryVersion"
 
     compile project(':rc-content')
 

@@ -28,6 +28,7 @@
                 android:orientation="vertical" />
 
             <LinearLayout
+                android:id="@+id/ll_cache_cleaner"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginTop="1dp"
@@ -35,6 +36,7 @@
                 android:orientation="vertical" />
 
             <LinearLayout
+                android:id="@+id/ll_history_cleaner"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginTop="1dp"
@@ -42,6 +44,7 @@
                 android:orientation="vertical" />
 
             <LinearLayout
+                android:id="@+id/ll_uninstall"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginTop="1dp"
@@ -49,6 +52,7 @@
                 android:orientation="vertical" />
 
             <LinearLayout
+                android:id="@+id/ll_move_to_sdcard"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginTop="1dp"
@@ -56,6 +60,7 @@
                 android:orientation="vertical" />
 
             <LinearLayout
+                android:id="@+id/ll_gps_refresh"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginTop="1dp"

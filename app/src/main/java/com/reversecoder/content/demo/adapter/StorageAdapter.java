@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -41,6 +42,7 @@ public class StorageAdapter<T> extends BaseAdapter implements Filterable {
     private ADAPTER_TYPE mAdapterType;
     private SparseBooleanArray mSelectedItemsIds;
     private FriendFilter friendFilter;
+    private boolean isChecBoxMode=false;
 
     public StorageAdapter(Activity activity, ADAPTER_TYPE adapterType) {
         mActivity = activity;
@@ -99,6 +101,11 @@ public class StorageAdapter<T> extends BaseAdapter implements Filterable {
         notifyDataSetChanged();
     }
 
+    public void showCheckBox(boolean show){
+        isChecBoxMode=show;
+        notifyDataSetChanged();
+    }
+
     public ADAPTER_TYPE getAdapterType() {
         return mAdapterType;
     }
@@ -131,12 +138,26 @@ public class StorageAdapter<T> extends BaseAdapter implements Filterable {
 
             ImageInfo imageInfo = (ImageInfo) mItem;
             ImageView ivDefaultIcon = (ImageView) vi.findViewById(R.id.iv_default_icon);
+            CheckBox cbSelectedItem=(CheckBox) vi.findViewById(R.id.cb_grid_item);
             Glide
                     .with(mActivity)
                     .load(imageInfo.getUri())
                     .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC))
                     .apply(new RequestOptions().placeholder(R.drawable.picture_default))
                     .into(ivDefaultIcon);
+
+            if(mSelectedItemsIds.get(position)){
+                cbSelectedItem.setChecked(true);
+            }else{
+                cbSelectedItem.setChecked(false);
+            }
+
+            if(isChecBoxMode){
+                cbSelectedItem.setVisibility(View.VISIBLE);
+            }else{
+                cbSelectedItem.setVisibility(View.GONE);
+            }
+
         } else {
 
             if (convertView == null)

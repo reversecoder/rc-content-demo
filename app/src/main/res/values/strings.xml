@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">rc-content-demo</string>
 
-    <string name="title_activity_main">Super Speed</string>
+    <string name="title_activity_main">SdCardManager</string>
     <string name="title_activity_storage_management">Storage Management</string>
     <string name="title_activity_picture">Picture</string>
     <string name="title_activity_music">Music</string>
@@ -11,7 +11,15 @@
 
     <!-- Dialog message -->
     <string name="dialog_attention">Attention</string>
-    <string name="dialog_message">Do you want to delete the selected items?</string>
+    <string name="dialog_message">Do you want to delete</string>
     <string name="dialog_button_ok">OK</string>
     <string name="dialog_button_cancel">Cancel</string>
+
+    <!-- toast -->
+    <string name="toast_feature_out_of_scope">Feature out of scope</string>
+
+    <!-- fragment -->
+    <string name="fragment_title_installed_app">Installed</string>
+    <string name="fragment_title_unused_app">Unused</string>
+
 </resources>

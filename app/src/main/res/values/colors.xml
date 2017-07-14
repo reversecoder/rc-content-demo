@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="colorLightBlue">#c9eaf5</color>
+    <color name="colorTabBackground">#00c9c9</color>
 </resources>

@@ -116,4 +116,20 @@ public class ApplicationLoader {
 
         return allApks;
     }
+
+    public static ArrayList<AppInfo> getAllUnusedApks(Context context, int defaultAppIcon) {
+        ArrayList<AppInfo> allApks = new ArrayList<AppInfo>();
+        AppInfo appInfo;
+        ArrayList<File> unUsedApk = StorageManager.getInstance().getAllFilesFromExternalSdCard(Environment.getExternalStorageDirectory(), StorageManager.FileType.APK);
+        for (int i = 0; i < unUsedApk.size(); i++) {
+            appInfo = new AppInfo();
+            appInfo.setAppName(unUsedApk.get(i).getName());
+            appInfo.setApkSize(unUsedApk.get(i).length());
+            appInfo.setIcon(ContextCompat.getDrawable(context, defaultAppIcon));
+            appInfo.setSdCardPath(unUsedApk.get(i).getAbsolutePath());
+            allApks.add(appInfo);
+        }
+
+        return allApks;
+    }
 }

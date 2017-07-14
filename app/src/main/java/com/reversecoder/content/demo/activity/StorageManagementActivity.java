@@ -35,6 +35,8 @@ public class StorageManagementActivity extends AppCompatActivity {
     public static ArrayList<AudioInfo> allMusics = new ArrayList<AudioInfo>();
     public static ArrayList<VideoInfo> allMovies = new ArrayList<VideoInfo>();
     public static ArrayList<AppInfo> allApplications = new ArrayList<AppInfo>();
+    public static ArrayList<AppInfo> allInstalledApplications = new ArrayList<AppInfo>();
+    public static ArrayList<AppInfo> allUnusedApplications = new ArrayList<AppInfo>();
     public static ArrayList<FileInfo> allOther = new ArrayList<FileInfo>();
     public static long totalImageSize=0,totalMusicSize=0,totalMovieSize=0,totalApplicationSize=0,totalOtherSize=0;
 
@@ -226,7 +228,10 @@ public class StorageManagementActivity extends AppCompatActivity {
 
         @Override
         public Long doInBackground(String... params) {
-            allApplications= ApplicationLoader.getAllInstalledWithUnusedApks(mContext,R.drawable.application_default);
+            allInstalledApplications= ApplicationLoader.getInstalledApplications(mContext);
+            allUnusedApplications= ApplicationLoader.getAllUnusedApks(mContext,R.drawable.application_default);
+            allApplications.addAll(allInstalledApplications);
+            allApplications.addAll(allUnusedApplications);
             long currentApplicationSize=0;
             for(int i=0;i<allApplications.size();i++){
                 currentApplicationSize=currentApplicationSize+allApplications.get(i).getApkSize();

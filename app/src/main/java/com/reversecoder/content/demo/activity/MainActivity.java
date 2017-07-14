@@ -41,35 +41,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        sdCardContent=sdCardContent+"\n\n\n"+"Audios:\n\n\n";
-//        ArrayList<AudioInfo> audios = AudioLoader.getAllAudios(MainActivity.this);
-//        for(int i = 0; i< audios.size(); i++){
-//            sdCardContent = sdCardContent+(i+1)+". "+audios.get(i).toString()+"\n\n";
-//            Log.d(TAG+"-audio: ", (i+1)+". "+audios.get(i).toString());
-//        }
-//
-//        sdCardContent=sdCardContent+"\n\n\n"+"Videos:\n\n\n";
-//        ArrayList<VideoInfo> videos = VideoLoader.getAllVideos(MainActivity.this);
-//        for(int i = 0; i< videos.size(); i++){
-//            sdCardContent = sdCardContent+(i+1)+". "+videos.get(i).toString()+"\n\n";
-//            Log.d(TAG+"-video: ", (i+1)+". "+videos.get(i).toString());
-//        }
-//
-//        sdCardContent=sdCardContent+"\n\n\n"+"Images:\n\n\n";
-//        ArrayList<ImageInfo> images = ImageLoader.getAllImages(MainActivity.this);
-//        for(int i = 0; i< images.size(); i++){
-//            sdCardContent = sdCardContent+(i+1)+". "+images.get(i).toString()+"\n\n";
-//            Log.d(TAG+"-image: ", (i+1)+". "+images.get(i).toString());
-//        }
-//
-//        sdCardContent=sdCardContent+"\n\n\n"+"Files:\n\n\n";
-//        ArrayList<FileInfo> files = FileLoader.getAllFiles(MainActivity.this);
-//        for(int i = 0; i< files.size(); i++){
-//            sdCardContent = sdCardContent+(i+1)+". "+files.get(i).toString()+"\n\n";
-//            Log.d(TAG+"-file: ", (i+1)+". "+files.get(i).toString());
-//        }
-//
-//        ((TextView)findViewById(R.id.tv_sdcard_content)).setText(sdCardContent);
+        ((LinearLayout) findViewById(R.id.ll_cache_cleaner)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Toast.makeText(MainActivity.this,getString(R.string.toast_feature_out_of_scope),Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ((LinearLayout) findViewById(R.id.ll_history_cleaner)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this,getString(R.string.toast_feature_out_of_scope),Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ((LinearLayout) findViewById(R.id.ll_uninstall)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this,getString(R.string.toast_feature_out_of_scope),Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ((LinearLayout) findViewById(R.id.ll_move_to_sdcard)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this,getString(R.string.toast_feature_out_of_scope),Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ((LinearLayout) findViewById(R.id.ll_gps_refresh)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this,getString(R.string.toast_feature_out_of_scope),Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private boolean checkAndRequestPermissions() {

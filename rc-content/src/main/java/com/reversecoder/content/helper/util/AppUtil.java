@@ -5,6 +5,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 
+import java.io.File;
 import java.text.DecimalFormat;
 
 public class AppUtil {
@@ -52,5 +53,35 @@ public class AppUtil {
         PackageManager packageManager = context.getPackageManager();
         String label = packageManager.getApplicationLabel(info).toString();
         return label;
+    }
+
+    public static void deleteFile(Context context, Uri uri) {
+        try {
+            File file = new File(RealPathUtils.getPath(context, uri));
+            file.delete();
+            if (file.exists()) {
+                file.getCanonicalFile().delete();
+                if (file.exists()) {
+                    context.getApplicationContext().deleteFile(file.getName());
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void deleteFile(Context context, String sdCardPath) {
+        try {
+            File file = new File(sdCardPath);
+            file.delete();
+            if (file.exists()) {
+                file.getCanonicalFile().delete();
+                if (file.exists()) {
+                    context.getApplicationContext().deleteFile(file.getName());
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
