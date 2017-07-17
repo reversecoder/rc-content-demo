@@ -3,13 +3,16 @@ package com.reversecoder.content.demo.adapter;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -30,6 +33,10 @@ import com.reversecoder.content.helper.util.AppUtil;
 
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
+import static com.reversecoder.content.demo.util.AllConstants.REQUEST_CODE_UNINSTALL_APP;
+import static com.reversecoder.content.demo.util.AllConstants.UNINSTALL_PACKAGE_POSITION;
+
 /**
  * @author Md. Rashadul Alam
  */
@@ -42,7 +49,7 @@ public class StorageAdapter<T> extends BaseAdapter implements Filterable {
     private ADAPTER_TYPE mAdapterType;
     private SparseBooleanArray mSelectedItemsIds;
     private FriendFilter friendFilter;
-    private boolean isChecBoxMode=false;
+    private boolean isChecBoxMode = false;
 
     public StorageAdapter(Activity activity, ADAPTER_TYPE adapterType) {
         mActivity = activity;
@@ -81,7 +88,12 @@ public class StorageAdapter<T> extends BaseAdapter implements Filterable {
                 if (videoInfo.getTitle().contains(name)) {
                     return i;
                 }
-            } else if (mAdapterType == ADAPTER_TYPE.APPLICATION) {
+            } else if (mAdapterType == ADAPTER_TYPE.APPLICATION_INSTALLED) {
+                AppInfo appInfo = (AppInfo) mData.get(i);
+                if (appInfo.getAppName().contains(name)) {
+                    return i;
+                }
+            } else if (mAdapterType == ADAPTER_TYPE.APPLICATION_UNUSED) {
                 AppInfo appInfo = (AppInfo) mData.get(i);
                 if (appInfo.getAppName().contains(name)) {
                     return i;
@@ -101,8 +113,8 @@ public class StorageAdapter<T> extends BaseAdapter implements Filterable {
         notifyDataSetChanged();
     }
 
-    public void showCheckBox(boolean show){
-        isChecBoxMode=show;
+    public void showCheckBox(boolean show) {
+        isChecBoxMode = show;
         notifyDataSetChanged();
     }
 
@@ -138,7 +150,7 @@ public class StorageAdapter<T> extends BaseAdapter implements Filterable {
 
             ImageInfo imageInfo = (ImageInfo) mItem;
             ImageView ivDefaultIcon = (ImageView) vi.findViewById(R.id.iv_default_icon);
-            CheckBox cbSelectedItem=(CheckBox) vi.findViewById(R.id.cb_grid_item);
+            CheckBox cbSelectedItem = (CheckBox) vi.findViewById(R.id.cb_grid_item);
             Glide
                     .with(mActivity)
                     .load(imageInfo.getUri())
@@ -146,28 +158,29 @@ public class StorageAdapter<T> extends BaseAdapter implements Filterable {
                     .apply(new RequestOptions().placeholder(R.drawable.picture_default))
                     .into(ivDefaultIcon);
 
-            if(mSelectedItemsIds.get(position)){
+            if (mSelectedItemsIds.get(position)) {
                 cbSelectedItem.setChecked(true);
-            }else{
+            } else {
                 cbSelectedItem.setChecked(false);
             }
 
-            if(isChecBoxMode){
+            if (isChecBoxMode) {
                 cbSelectedItem.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 cbSelectedItem.setVisibility(View.GONE);
             }
 
         } else {
 
-            if (convertView == null)
-                vi = inflater.inflate(R.layout.list_row_storage, null);
-
-            ImageView ivDefaultIcon = (ImageView) vi.findViewById(R.id.iv_default_icon);
-            TextView tvTitle = (TextView) vi.findViewById(R.id.tv_title);
-            TextView tvSubTitle = (TextView) vi.findViewById(R.id.tv_subitle);
-
             if (mAdapterType == ADAPTER_TYPE.MUSIC) {
+
+                if (convertView == null)
+                    vi = inflater.inflate(R.layout.list_row_storage, null);
+
+                ImageView ivDefaultIcon = (ImageView) vi.findViewById(R.id.iv_default_icon);
+                TextView tvTitle = (TextView) vi.findViewById(R.id.tv_title);
+                TextView tvSubTitle = (TextView) vi.findViewById(R.id.tv_subitle);
+
                 AudioInfo audioInfo = (AudioInfo) mItem;
                 Glide
                         .with(mActivity)
@@ -178,6 +191,14 @@ public class StorageAdapter<T> extends BaseAdapter implements Filterable {
                 tvTitle.setText(audioInfo.getTitle());
                 tvSubTitle.setText(audioInfo.getReadableSize());
             } else if (mAdapterType == ADAPTER_TYPE.MOVIE) {
+
+                if (convertView == null)
+                    vi = inflater.inflate(R.layout.list_row_storage, null);
+
+                ImageView ivDefaultIcon = (ImageView) vi.findViewById(R.id.iv_default_icon);
+                TextView tvTitle = (TextView) vi.findViewById(R.id.tv_title);
+                TextView tvSubTitle = (TextView) vi.findViewById(R.id.tv_subitle);
+
                 VideoInfo videoInfo = (VideoInfo) mItem;
                 Glide
                         .with(mActivity)
@@ -187,12 +208,60 @@ public class StorageAdapter<T> extends BaseAdapter implements Filterable {
                         .into(ivDefaultIcon);
                 tvTitle.setText(videoInfo.getTitle());
                 tvSubTitle.setText(videoInfo.getReadableSize());
-            } else if (mAdapterType == ADAPTER_TYPE.APPLICATION) {
+            } else if (mAdapterType == ADAPTER_TYPE.APPLICATION_INSTALLED) {
+
+                if (convertView == null)
+                    vi = inflater.inflate(R.layout.list_row_installed_app, null);
+
+                ImageView ivDefaultIcon = (ImageView) vi.findViewById(R.id.iv_default_icon);
+                TextView tvTitle = (TextView) vi.findViewById(R.id.tv_title);
+                TextView tvSubTitle = (TextView) vi.findViewById(R.id.tv_subitle);
+                Button btnAction = (Button) vi.findViewById(R.id.btn_action);
+
+                final AppInfo appInfo = (AppInfo) mItem;
+                ivDefaultIcon.setImageDrawable(appInfo.getIcon());
+                tvTitle.setText(appInfo.getAppName());
+                tvSubTitle.setText(AppUtil.getReadableFileSize((int) appInfo.getApkSize()));
+
+                btnAction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        UNINSTALL_PACKAGE_POSITION=position;
+                        Intent intent;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                            intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
+                        } else {
+                            intent = new Intent(Intent.ACTION_DELETE);
+                        }
+                        intent.setData(Uri.fromParts("package", appInfo.getPackageName(), null));
+                        intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
+                        mActivity.startActivityForResult(intent, REQUEST_CODE_UNINSTALL_APP);
+                    }
+                });
+
+            } else if (mAdapterType == ADAPTER_TYPE.APPLICATION_UNUSED) {
+
+                if (convertView == null)
+                    vi = inflater.inflate(R.layout.list_row_storage, null);
+
+                ImageView ivDefaultIcon = (ImageView) vi.findViewById(R.id.iv_default_icon);
+                TextView tvTitle = (TextView) vi.findViewById(R.id.tv_title);
+                TextView tvSubTitle = (TextView) vi.findViewById(R.id.tv_subitle);
+
                 AppInfo appInfo = (AppInfo) mItem;
                 ivDefaultIcon.setImageDrawable(appInfo.getIcon());
                 tvTitle.setText(appInfo.getAppName());
                 tvSubTitle.setText(AppUtil.getReadableFileSize((int) appInfo.getApkSize()));
+
             } else if (mAdapterType == ADAPTER_TYPE.OTHER) {
+
+                if (convertView == null)
+                    vi = inflater.inflate(R.layout.list_row_storage, null);
+
+                ImageView ivDefaultIcon = (ImageView) vi.findViewById(R.id.iv_default_icon);
+                TextView tvTitle = (TextView) vi.findViewById(R.id.tv_title);
+                TextView tvSubTitle = (TextView) vi.findViewById(R.id.tv_subitle);
+
                 FileInfo other = (FileInfo) mItem;
                 ivDefaultIcon.setBackgroundResource(R.drawable.file_default);
                 tvTitle.setText(other.getTitle());
@@ -209,7 +278,7 @@ public class StorageAdapter<T> extends BaseAdapter implements Filterable {
         return vi;
     }
 
-    public enum ADAPTER_TYPE {MUSIC, MOVIE, APPLICATION, OTHER, PICTURE}
+    public enum ADAPTER_TYPE {MUSIC, MOVIE, APPLICATION_INSTALLED, APPLICATION_UNUSED, OTHER, PICTURE}
 
     /**************************************************************
      * Methods required for do selections, remove selections, etc.*
@@ -295,7 +364,12 @@ public class StorageAdapter<T> extends BaseAdapter implements Filterable {
                         if (videoInfo.getTitle().toLowerCase().contains(constraint.toString().toLowerCase())) {
                             tempList.add(item);
                         }
-                    } else if (mAdapterType == ADAPTER_TYPE.APPLICATION) {
+                    } else if (mAdapterType == ADAPTER_TYPE.APPLICATION_INSTALLED) {
+                        AppInfo appInfo = (AppInfo) item;
+                        if (appInfo.getAppName().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                            tempList.add(item);
+                        }
+                    } else if (mAdapterType == ADAPTER_TYPE.APPLICATION_UNUSED) {
                         AppInfo appInfo = (AppInfo) item;
                         if (appInfo.getAppName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                             tempList.add(item);

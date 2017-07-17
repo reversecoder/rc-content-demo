@@ -1,18 +1,18 @@
 package com.reversecoder.content.demo.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ActionMode;
-import android.support.v7.widget.SearchView;
-import android.view.MenuItem;
 
 import com.reversecoder.content.demo.R;
 import com.reversecoder.content.demo.adapter.ViewPagerAdapter;
 import com.reversecoder.content.demo.fragment.InstalledAppFragment;
 import com.reversecoder.content.demo.fragment.UnusedAppFragment;
+
+import static com.reversecoder.content.demo.util.AllConstants.REQUEST_CODE_UNINSTALL_APP;
 
 /**
  * @author Md. Rashadul Alam
@@ -25,6 +25,7 @@ public class ApplicationsActivity extends AppCompatActivity {
 
     private Fragment fragmentInstalledApps;
     private Fragment fragmentUnusedApps;
+    private String TAG = ApplicationsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,5 +60,14 @@ public class ApplicationsActivity extends AppCompatActivity {
     //Return current fragment on basis of Position
     public Fragment getFragment(int pos) {
         return viewPagerAdapter.getItem(pos);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_UNINSTALL_APP) {
+            Fragment listFragment = getFragment(0);
+            listFragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

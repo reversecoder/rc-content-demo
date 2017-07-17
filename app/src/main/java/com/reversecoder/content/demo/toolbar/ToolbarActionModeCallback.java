@@ -87,11 +87,11 @@ public class ToolbarActionModeCallback<T> implements ActionMode.Callback {
             ((MoviesActivity) context).setNullToActionMode();
         } else if (storageAdapter.getAdapterType() == StorageAdapter.ADAPTER_TYPE.OTHER) {
             ((OthersActivity) context).setNullToActionMode();
-        } else if (storageAdapter.getAdapterType() == StorageAdapter.ADAPTER_TYPE.APPLICATION) {
+        } else if (storageAdapter.getAdapterType() == StorageAdapter.ADAPTER_TYPE.APPLICATION_UNUSED) {
             if (isFragmentInstalledApp) {
-                Fragment listFragment = ((ApplicationsActivity) context).getFragment(0);
-                if (listFragment != null)
-                    ((InstalledAppFragment) listFragment).setNullToActionMode();
+//                Fragment listFragment = ((ApplicationsActivity) context).getFragment(0);
+//                if (listFragment != null)
+//                    ((InstalledAppFragment) listFragment).setNullToActionMode();
             } else {
                 Fragment listFragment = ((ApplicationsActivity) context).getFragment(1);
                 if (listFragment != null)
@@ -114,11 +114,11 @@ public class ToolbarActionModeCallback<T> implements ActionMode.Callback {
                             ((MoviesActivity) context).deleteRows();
                         } else if (storageAdapter.getAdapterType() == StorageAdapter.ADAPTER_TYPE.OTHER) {
                             ((OthersActivity) context).deleteRows();
-                        } else if (storageAdapter.getAdapterType() == StorageAdapter.ADAPTER_TYPE.APPLICATION) {
+                        } else if (storageAdapter.getAdapterType() == StorageAdapter.ADAPTER_TYPE.APPLICATION_UNUSED) {
                             if (isFragmentInstalledApp) {
-                                Fragment listFragment = ((ApplicationsActivity) context).getFragment(0);
-                                if (listFragment != null)
-                                    ((InstalledAppFragment) listFragment).deleteRows();
+//                                Fragment listFragment = ((ApplicationsActivity) context).getFragment(0);
+//                                if (listFragment != null)
+//                                    ((InstalledAppFragment) listFragment).deleteRows();
                             } else {
                                 Fragment listFragment = ((ApplicationsActivity) context).getFragment(1);
                                 if (listFragment != null)

@@ -62,7 +62,7 @@ public class UnusedAppFragment extends Fragment {
 
         lvStorage = (ListView) parentView.findViewById(R.id.lv_storage);
 
-        storageListViewAdapter = new StorageAdapter(getActivity(), StorageAdapter.ADAPTER_TYPE.APPLICATION);
+        storageListViewAdapter = new StorageAdapter(getActivity(), StorageAdapter.ADAPTER_TYPE.APPLICATION_UNUSED);
         lvStorage.setAdapter(storageListViewAdapter);
         storageListViewAdapter.setData(allUnusedApplications);
     }

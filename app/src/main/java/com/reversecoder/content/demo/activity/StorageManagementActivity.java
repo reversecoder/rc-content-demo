@@ -44,8 +44,6 @@ public class StorageManagementActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_storage_management);
-        initUI();
-        initActions();
     }
 
     private void initUI() {
@@ -106,6 +104,14 @@ public class StorageManagementActivity extends AppCompatActivity {
 
         LoadOthers loadOthers = new LoadOthers(StorageManagementActivity.this,(TextView)findViewById(R.id.tv_other_size));
         loadOthers.execute();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        initUI();
+        initActions();
     }
 
     public class LoadImages extends AsyncTask<String, String, Long> {

@@ -1,15 +1,20 @@
 package com.reversecoder.content.demo.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.reversecoder.content.demo.R;
+import com.reversecoder.content.helper.mediascanner.MediaScanner;
+import com.reversecoder.content.helper.mediascanner.ScannerListener;
 import com.reversecoder.content.helper.util.RuntimePermissionManager;
 
 import java.util.ArrayList;
@@ -25,10 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if (checkAndRequestPermissions()) {
-            initUI();
-        }
     }
 
     private void initUI() {
@@ -87,6 +88,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if (checkAndRequestPermissions()) {
+            initUI();
+        }
     }
 
     @Override

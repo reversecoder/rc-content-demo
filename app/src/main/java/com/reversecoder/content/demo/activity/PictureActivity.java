@@ -118,6 +118,7 @@ public class PictureActivity extends AppCompatActivity {
             if (selected.valueAt(i)) {
                 //delete from sdcard
                 AppUtil.deleteFile(PictureActivity.this, ((ImageInfo) storageGridViewAdapter.getItem(selected.keyAt(i))).getUri());
+
                 //If current id is selected remove the item via key
                 storageGridViewAdapter.removeItem(selected.keyAt(i));
             }

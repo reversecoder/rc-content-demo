@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.util.Log;
+
+import com.reversecoder.content.helper.mediascanner.MediaScanner;
+import com.reversecoder.content.helper.mediascanner.ScannerListener;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -17,7 +21,7 @@ public class AppUtil {
      * @return
      * @author paulburke
      */
-    public static String getReadableFileSize(int size) {
+    public static String getReadableFileSize(long size) {
         final int BYTES_IN_KILOBYTES = 1024;
         final DecimalFormat dec = new DecimalFormat("###.#");
         final String KILOBYTES = " KB";
@@ -58,11 +62,15 @@ public class AppUtil {
     public static void deleteFile(Context context, Uri uri) {
         try {
             File file = new File(RealPathUtils.getPath(context, uri));
-            file.delete();
+            if(file.delete()){
+                updateMediaStore(context, uri);
+            }
             if (file.exists()) {
                 file.getCanonicalFile().delete();
                 if (file.exists()) {
-                    context.getApplicationContext().deleteFile(file.getName());
+                    if (context.getApplicationContext().deleteFile(file.getName())) {
+                        updateMediaStore(context, uri);
+                    }
                 }
             }
         } catch (Exception ex) {
@@ -73,13 +81,55 @@ public class AppUtil {
     public static void deleteFile(Context context, String sdCardPath) {
         try {
             File file = new File(sdCardPath);
-            file.delete();
+            if(file.delete()){
+                updateMediaStore(context, sdCardPath);
+            }
             if (file.exists()) {
                 file.getCanonicalFile().delete();
                 if (file.exists()) {
-                    context.getApplicationContext().deleteFile(file.getName());
+                    if (context.getApplicationContext().deleteFile(file.getName())) {
+                        updateMediaStore(context, sdCardPath);
+                    }
                 }
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private static void updateMediaStore(Context context, Uri fileUri) {
+        try {
+            MediaScanner mediaScanner = new MediaScanner(context, new ScannerListener() {
+                @Override
+                public void oneComplete(String path, Uri uri) {
+                }
+
+                @Override
+                public void allComplete(String[] filePaths) {
+                    Log.d("MediaScanner:", "Scan completed");
+                }
+            });
+            mediaScanner.scan(RealPathUtils.getPath(context, fileUri));
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private static void updateMediaStore(Context context, String filePath) {
+        try {
+            MediaScanner mediaScanner = new MediaScanner(context, new ScannerListener() {
+                @Override
+                public void oneComplete(String path, Uri uri) {
+                }
+
+                @Override
+                public void allComplete(String[] filePaths) {
+                    Log.d("MediaScanner", "Scan completed");
+                }
+            });
+            mediaScanner.scan(filePath);
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
