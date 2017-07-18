@@ -31,7 +31,7 @@ public class PictureActivity extends AppCompatActivity {
     StorageAdapter storageGridViewAdapter;
 
     //Action Mode for toolbar
-    private ActionMode mActionMode;
+    public ActionMode mActionMode;
     //SearchView
     private SearchView searchView;
     private MenuItem searchMenuItem;
@@ -77,7 +77,7 @@ public class PictureActivity extends AppCompatActivity {
      * Methods for toolbar action mode
      **********************************/
     //List item select method
-    private void onListItemSelect(int position) {
+    public void onListItemSelect(int position) {
         storageGridViewAdapter.toggleSelection(position);//Toggle the selection
 
         boolean hasCheckedItems = storageGridViewAdapter.getSelectedCount() > 0;//Check if any items are already selected or not

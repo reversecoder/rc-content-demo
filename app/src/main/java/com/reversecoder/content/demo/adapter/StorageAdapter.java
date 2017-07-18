@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.reversecoder.content.demo.R;
+import com.reversecoder.content.demo.activity.PictureActivity;
 import com.reversecoder.content.helper.model.AppInfo;
 import com.reversecoder.content.helper.model.AudioInfo;
 import com.reversecoder.content.helper.model.FileInfo;
@@ -33,7 +34,6 @@ import com.reversecoder.content.helper.util.AppUtil;
 
 import java.util.ArrayList;
 
-import static android.app.Activity.RESULT_OK;
 import static com.reversecoder.content.demo.util.AllConstants.REQUEST_CODE_UNINSTALL_APP;
 import static com.reversecoder.content.demo.util.AllConstants.UNINSTALL_PACKAGE_POSITION;
 
@@ -170,6 +170,14 @@ public class StorageAdapter<T> extends BaseAdapter implements Filterable {
                 cbSelectedItem.setVisibility(View.GONE);
             }
 
+            cbSelectedItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (((PictureActivity) mActivity).mActionMode != null)
+                        ((PictureActivity) mActivity).onListItemSelect(position);
+                }
+            });
+
         } else {
 
             if (mAdapterType == ADAPTER_TYPE.MUSIC) {
@@ -226,7 +234,7 @@ public class StorageAdapter<T> extends BaseAdapter implements Filterable {
                 btnAction.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        UNINSTALL_PACKAGE_POSITION=position;
+                        UNINSTALL_PACKAGE_POSITION = position;
                         Intent intent;
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                             intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
